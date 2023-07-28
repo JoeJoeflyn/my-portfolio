@@ -24,11 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.className} bg-[url('../public/simple-black-cross-repeat-pattern-.jpg')]`}
-      >
-        {children}
-      </body>
+      <body className={`${roboto.className} img-bg`}>{children}</body>
     </html>
   );
 }

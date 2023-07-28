@@ -38,7 +38,7 @@ export default function Header() {
                 className="logoRotate"
                 width={32}
                 height={32}
-                src="/../public/black-cross.jpeg"
+                src="/../public/static/black-cross.jpeg"
                 alt="black-cross"
               />
             </a>
@@ -94,7 +94,7 @@ export default function Header() {
               <Image
                 width={32}
                 height={32}
-                src="/../public/black-cross.jpeg"
+                src="/../public/static/black-cross.jpeg"
                 alt="black-cross"
               />
             </a>
