@@ -19,7 +19,7 @@ export default function About() {
           <div className="slide-track">
             <div className="slide">
               <Image
-                src="/../public/images/JavaScript-logo.png"
+                src="/images/JavaScript-logo.png"
                 height="100"
                 width="100"
                 alt=""
@@ -27,7 +27,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/images/tailwind.png"
+                src="/images/tailwind.png"
                 height="100"
                 width="100"
                 alt=""
@@ -35,7 +35,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/images/nextjs1.png"
+                src="/images/nextjs1.png"
                 height="100"
                 width="100"
                 alt=""
@@ -43,7 +43,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/images/typescript.png"
+                src="/images/typescript.png"
                 height="100"
                 width="100"
                 alt=""
@@ -51,35 +51,20 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/images/reactjs.png"
+                src="/images/reactjs.png"
                 height="100"
                 width="100"
                 alt=""
               />
             </div>
             <div className="slide">
-              <Image
-                src="/../public/images/nodejs.png"
-                height="100"
-                width="100"
-                alt=""
-              />
+              <Image src="/images/nodejs.png" height="100" width="100" alt="" />
             </div>
             <div className="slide">
-              <Image
-                src="/../public/images/html.png"
-                height="100"
-                width="100"
-                alt=""
-              />
+              <Image src="/images/html.png" height="100" width="100" alt="" />
             </div>
             <div className="slide">
-              <Image
-                src="/../public/images/css.png"
-                height="100"
-                width="100"
-                alt=""
-              />
+              <Image src="/images/css.png" height="100" width="100" alt="" />
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ export default function SocialMedia() {
             <Image
               width={42}
               height={42}
-              src="/../public/images/linkedin.png"
+              src="/images/linkedin.png"
               alt="linkedin"
               className="shadow-lg shadow-[#337CB6]"
             />
@@ -30,7 +30,7 @@ export default function SocialMedia() {
             <Image
               width={42}
               height={42}
-              src="/../public/images/github2.png"
+              src="/images/github2.png"
               alt="github"
               className="shadow-lg shadow-black"
             />
@@ -43,7 +43,7 @@ export default function SocialMedia() {
             <Image
               width={42}
               height={42}
-              src="/../public/images/wakatime3.png"
+              src="/images/wakatime3.png"
               alt="wakatime"
               className="shadow-lg shadow-black"
             />
