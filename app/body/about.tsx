@@ -19,7 +19,7 @@ export default function About() {
           <div className="slide-track">
             <div className="slide">
               <Image
-                src="/../public/static/JavaScript-logo.png"
+                src="/../public/images/JavaScript-logo.png"
                 height="100"
                 width="100"
                 alt=""
@@ -27,7 +27,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/static/tailwind.png"
+                src="/../public/images/tailwind.png"
                 height="100"
                 width="100"
                 alt=""
@@ -35,7 +35,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/static/nextjs1.png"
+                src="/../public/images/nextjs1.png"
                 height="100"
                 width="100"
                 alt=""
@@ -43,7 +43,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/static/typescript.png"
+                src="/../public/images/typescript.png"
                 height="100"
                 width="100"
                 alt=""
@@ -51,7 +51,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/static/reactjs.png"
+                src="/../public/images/reactjs.png"
                 height="100"
                 width="100"
                 alt=""
@@ -59,7 +59,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/static/nodejs.png"
+                src="/../public/images/nodejs.png"
                 height="100"
                 width="100"
                 alt=""
@@ -67,7 +67,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/static/html.png"
+                src="/../public/images/html.png"
                 height="100"
                 width="100"
                 alt=""
@@ -75,7 +75,7 @@ export default function About() {
             </div>
             <div className="slide">
               <Image
-                src="/../public/static/css.png"
+                src="/../public/images/css.png"
                 height="100"
                 width="100"
                 alt=""
