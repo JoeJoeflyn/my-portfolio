@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.ico",
   },
+  verification: {
+    google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",
+  },
 };
 
 export default function RootLayout({
@@ -25,12 +28,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
-        <meta
-          name="google-site-verification"
-          content="h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4"
-        />
-      </Head>
       <body className={`${roboto.className} img-bg`}>{children}</body>
     </html>
   );
