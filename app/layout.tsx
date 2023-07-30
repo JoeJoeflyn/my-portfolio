@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   verification: {
     google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",
   },
+  robots: {
+    nositelinkssearchbox: true,
+    notranslate: true,
+    index: true,
+  },
 };
 
 export default function RootLayout({
@@ -28,6 +33,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        <title>Meta Tag Example</title>
+        <meta name="robots" content="all" />
+        <meta name="google" content="nositelinkssearchbox" key="sitelinks" />
+        <meta name="google" content="notranslate" key="notranslate" />
+      </Head>
       <body className={`${roboto.className} img-bg`}>{children}</body>
     </html>
   );
