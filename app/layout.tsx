@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import Head from "next/head";
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -24,6 +25,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        <meta
+          name="google-site-verification"
+          content="h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4"
+        />
+      </Head>
       <body className={`${roboto.className} img-bg`}>{children}</body>
     </html>
   );

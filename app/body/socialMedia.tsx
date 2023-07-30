@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
 export default function SocialMedia() {
   return (
@@ -9,9 +10,9 @@ export default function SocialMedia() {
             <h1 className="colorSliding p-2">social media 🔎 💬</h1>
           </div>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-3 justify-center gap-6 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 justify-center gap-6 py-6">
           <a
-            className="flex items-center bg-white shadow-md rounded-lg p-2 hover:border-[#337CB6] hover:scale-105 hover:border-4 border-4 border-transparent transition duration-500 ease-in"
+            className="grid grid-cols-[40px_1fr_40px] items-center bg-white shadow-md rounded-lg p-2 hover:border-[#337CB6] hover:scale-105 hover:border-4 border-4 border-transparent transition duration-500 ease-in"
             href="https://www.linkedin.com/in/tai-nguyen-106a1624b/"
           >
             <Image
@@ -21,10 +22,11 @@ export default function SocialMedia() {
               alt="linkedin"
               className="shadow-lg shadow-[#337CB6]"
             />
-            <span className="pl-3">Tai Nguyen</span>
+            <span className="ml-3">Tai Nguyen</span>
+            <ArrowTopRightOnSquareIcon className="h-6 w-6" />
           </a>
           <a
-            className="flex items-center bg-white shadow-md rounded-lg p-2 hover:border-black hover:scale-105 hover:border-4 border-4 border-transparent transition duration-500 ease-in"
+            className="grid grid-cols-[40px_1fr_40px] items-center bg-white shadow-md rounded-lg p-2 hover:border-black hover:scale-105 hover:border-4 border-4 border-transparent transition duration-500 ease-in"
             href="https://github.com/JoeJoeflyn"
           >
             <Image
@@ -34,10 +36,11 @@ export default function SocialMedia() {
               alt="github"
               className="shadow-lg shadow-black"
             />
-            <span className="pl-3">JoeJoeflyn</span>
+            <span className="ml-3">JoeJoeflyn</span>
+            <ArrowTopRightOnSquareIcon className="h-6 w-6" />
           </a>
           <a
-            className="flex items-center bg-white shadow-md rounded-lg p-2 hover:border-black hover:scale-105 hover:border-4 border-4 border-transparent transition duration-500 ease-in"
+            className="grid grid-cols-[40px_1fr_40px] items-center bg-white shadow-md rounded-lg p-2 hover:border-black hover:scale-105 hover:border-4 border-4 border-transparent transition duration-500 ease-in"
             href="https://wakatime.com/@Joe_juicer03"
           >
             <Image
@@ -47,7 +50,8 @@ export default function SocialMedia() {
               alt="wakatime"
               className="shadow-lg shadow-black"
             />
-            <span className="pl-3">Joe_juicer03</span>
+            <span className="ml-3">Joe_juicer03</span>
+            <ArrowTopRightOnSquareIcon className="h-6 w-6" />
           </a>
         </div>
       </div>

@@ -10,10 +10,10 @@ export default function About() {
           </div>
         </div>
         <p className="font-medium py-6">
-          Bonjour 👋! I am Joe Juicer 21 years old 🇻🇳, student of web develope
-          at FPT Polytechnic College of CanTho. I love reading comic and manga,
-          playing games and sports(🎾 ⚽ 🏀), listening US-UK&apos;s song 🎶 and
-          news 📰. It&apos;s very nice to meet y&apos;all 🧡.
+          Bonjour 👋! I am Joe Juicer 21 years old 🇻🇳, student of web
+          development at FPT Polytechnic College of CanTho. I love reading comic
+          and manga, playing games and sports(🎾 ⚽ 🏀), listening US-UK&apos;s
+          song 🎶 and news 📰. It&apos;s very nice to meet y&apos;all 🧡.
         </p>
         <div className="slider">
           <div className="slide-track">
