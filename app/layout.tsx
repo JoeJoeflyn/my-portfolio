@@ -11,8 +11,10 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Joe Juicer",
-  description: "Joe Juicer Portfolio",
+  title: "Joe Juicer portfolio, this is the place where i show my journey",
+  description:
+    "Bonjour 👋! I am Joe Juicer 21 years old 🇻🇳, student of web development at FPT Polytechnic College of CanTho.",
+  // Should write more information in description tag above
   icons: {
     icon: "/icon.ico",
   },
@@ -20,9 +22,11 @@ export const metadata: Metadata = {
     google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",
   },
   robots: {
-    nositelinkssearchbox: true,
-    notranslate: true,
     index: true,
+    googleBot: {
+      notranslate: true,
+      nositelinkssearchbox: true,
+    },
   },
 };
 
@@ -33,13 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
-        <title>Meta Tag Example</title>
-        <meta name="robots" content="all" />
-        <meta name="google" content="nositelinkssearchbox" key="sitelinks" />
-        <meta name="google" content="notranslate" key="notranslate" />
-      </Head>
-      <body className={`${roboto.className} img-bg`}>{children}</body>
+      <body className={`${roboto.className}`}>{children}</body>
     </html>
   );
 }
