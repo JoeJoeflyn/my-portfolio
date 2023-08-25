@@ -96,8 +96,4 @@
       transform: translateX(calc(250px * 6));
     }
   }
-
-  .img-bg {
-    background-image: url("../public/images/simple-black-cross-repeat-pattern-.jpg");
-  }
 }

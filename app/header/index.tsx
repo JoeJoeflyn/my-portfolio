@@ -35,7 +35,7 @@ export default function Header() {
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <Image
-                className="logoRotate"
+                className="logoRotate hover:rotate-180"
                 width={32}
                 height={32}
                 src="/images/black-cross.jpeg"
@@ -56,29 +56,27 @@ export default function Header() {
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
             <a
               href="#"
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="text-sm font-semibold leading-6 text-gray-900 group transition duration-300"
             >
               About
+              <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-1 bg-[#f9b248]"></span>
             </a>
             <a
               href="#"
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="text-sm font-semibold leading-6 text-gray-900 group transition duration-300"
             >
-              Experience
+              Social media
+              <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-1 bg-[#f9b248]"></span>
             </a>
             <a
               href="#"
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="text-sm font-semibold leading-6 text-gray-900 group transition duration-300"
             >
               Project
+              <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-1 bg-[#f9b248]"></span>
             </a>
           </Popover.Group>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            {/* <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </a> */}
-            Dark mode could be right here
-          </div>
+          {/* <div className="hidden lg:flex lg:flex-1 lg:justify-end"></div> */}
         </div>
       </nav>
       <Dialog
@@ -120,7 +118,7 @@ export default function Header() {
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Experience
+                  Social media
                 </a>
                 <a
                   href="#"

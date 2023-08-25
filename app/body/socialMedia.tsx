@@ -7,7 +7,7 @@ export default function SocialMedia() {
       <div className="mx-auto max-w-7xl bg-[#fbfbfb] rounded-xl shadow-xl p-6 lg:px-8">
         <div className="text-2xl font-bold uppercase">
           <div className="flex justify-start">
-            <h1 className="colorSliding p-2">social media 🔎 💬</h1>
+            <p className="colorSliding p-2">social media 🔎 💬</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 justify-center gap-6 py-6">
