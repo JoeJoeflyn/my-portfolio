@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["https://my-portfolio-three-sepia.vercel.app"],
+    domains: ["drew.tech", "prod-files-secure.s3.us-west-2.amazonaws.com"],
   },
 };
 

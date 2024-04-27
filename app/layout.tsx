@@ -1,18 +1,13 @@
-import "./globals.css";
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
-import Head from "next/head";
-
-const roboto = Roboto({
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
-});
+import React from "react";
+import Footer from "./components/footer";
+import Header from "./components/header";
+import "./globals.css";
+import { Providers } from "./providers/providers";
 
 export const metadata: Metadata = {
-  title: "Joe Juicer",
-  description: "Joe Juicer Portfolio",
+  title: "Nguyen Thai Tai",
+  description: "Nguyen Thai Tai Portfolio",
   icons: {
     icon: "/icon.ico",
   },
@@ -33,13 +28,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
-        <title>Meta Tag Example</title>
-        <meta name="robots" content="all" />
-        <meta name="google" content="nositelinkssearchbox" key="sitelinks" />
-        <meta name="google" content="notranslate" key="notranslate" />
-      </Head>
-      <body className={`${roboto.className} img-bg`}>{children}</body>
+      <body>
+        <div className="flex h-full flex-col bg-zinc-50 dark:bg-black">
+          <div className="inset-0 flex justify-center sm:px-8">
+            <div className="flex w-full max-w-7xl lg:px-8">
+              <div className="w-full bg-white ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-300/20">
+                <Providers>
+                  <Header />
+                  {children}
+                  <Footer />
+                </Providers>
+              </div>
+            </div>
+          </div>
+        </div>
+      </body>
     </html>
   );
 }
