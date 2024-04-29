@@ -1,11 +1,5 @@
-"use client";
-import { techLogoHeaven, techLogoHell } from "@/app/shared/constant";
-import { NotionBlock } from "@/app/shared/interface";
-import {
-  dateFormate,
-  isBlockObjectResponse,
-  isPageObjectResponse,
-} from "@/app/shared/utils";
+import { TechLogoHeaven, TechLogoHell } from "@/app/shared/constant";
+import { dateFormate, isPageObjectResponse } from "@/app/shared/utils";
 import {
   DatabaseObjectResponse,
   PageObjectResponse,
@@ -31,7 +25,7 @@ export default function About({
         <div className="relative h-16 w-16">
           <Image
             fill={true}
-            src="/images/crop.jpeg"
+            src="/images/avatar.jpg"
             alt="Avatar"
             className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
           />
@@ -43,7 +37,7 @@ export default function About({
             </h1>
             <p className="mt-6 text-base leading-7 text-zinc-600 dark:text-zinc-400">
               Bonjour! I&apos;m Tai Nguyen, Juicer 21 years old, student of web
-              development at FPT Polytechnic College of CanTho. I enjoy reading
+              development at FPT PolyTechnic College of CanTho. I enjoy reading
               comics and manga, playing games and sports, listening US-UK&apos;s
               song and news. It&apos;s very nice to meet y&apos;all 🖤.
             </p>
@@ -111,7 +105,7 @@ export default function About({
         <div className="flex flex-col gap-3 mt-24 md:mt-28">
           <div className="w-full inline-flex gap-3 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
             <ul className="flex items-center gap-3 whitespace-nowrap justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll-right">
-              {techLogoHeaven.map((item, index) => (
+              {TechLogoHeaven.map((item, index) => (
                 <div
                   key={index}
                   className="flex justify-center items-center gap-2 h-12 p-5 rounded-full bg-white/90 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10"
@@ -125,7 +119,7 @@ export default function About({
               className="flex items-center gap-3 whitespace-nowrap justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll-right"
               aria-hidden="true"
             >
-              {techLogoHeaven.map((item, index) => (
+              {TechLogoHeaven.map((item, index) => (
                 <div
                   key={index}
                   className="flex justify-center items-center gap-2 h-12 p-5 rounded-full bg-white/90 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10"
@@ -138,7 +132,7 @@ export default function About({
           </div>
           <div className="w-full inline-flex gap-3 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
             <ul className="flex items-center gap-3 whitespace-nowrap justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll-left">
-              {techLogoHell.map((item, index) => (
+              {TechLogoHell.map((item, index) => (
                 <div
                   key={index}
                   className="flex justify-center items-center gap-2 h-12 p-5 rounded-full bg-white/90 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10"
@@ -152,7 +146,7 @@ export default function About({
               className="flex items-center gap-3 whitespace-nowrap justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll-left"
               aria-hidden="true"
             >
-              {techLogoHell.map((item, index) => (
+              {TechLogoHell.map((item, index) => (
                 <div
                   key={index}
                   className="flex justify-center items-center gap-2 h-12 p-5 rounded-full bg-white/90 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10"

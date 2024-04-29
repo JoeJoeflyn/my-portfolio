@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Text({ title }: { title: any[] }) {
   if (!title || title.length === 0) {
     return null;
@@ -28,7 +30,7 @@ export default function Text({ title }: { title: any[] }) {
             key={`${text.content}-${index}`}
           >
             {text.link ? (
-              <a href={text.link.url}>{text.content}</a>
+              <Link href={text.link.url}>{text.content}</Link>
             ) : (
               text.content
             )}

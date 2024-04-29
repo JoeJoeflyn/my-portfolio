@@ -1,6 +1,3 @@
-"use client";
-import React from "react";
-
 const FaviconDisplay = ({ href }: { href: string }) => {
   const getDomain = (url: string) => {
     try {
