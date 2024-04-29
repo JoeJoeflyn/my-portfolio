@@ -42,10 +42,10 @@ export default function Header() {
               </div>
               <div>
                 <a
-                  href="#"
+                  href="/waka-time"
                   className="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400"
                 >
-                  Feed
+                  WakaTime
                 </a>
               </div>
             </div>

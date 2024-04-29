@@ -21,3 +21,23 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
+.react-calendar-heatmap .color-scale-1 {
+  fill: #d0f0ed;
+}
+.react-calendar-heatmap .color-scale-2 {
+  fill: #17cfbb;
+}
+.react-calendar-heatmap .color-scale-3 {
+  fill: #14b8a6;
+}
+.react-calendar-heatmap .color-scale-4 {
+  fill: #12a191;
+}
+.react-calendar-heatmap .color-scale-5 {
+  fill: #0f8a7d;
+}
+
+.react-calendar-heatmap .color-scale-6 {
+  fill: #0d7368;
+}

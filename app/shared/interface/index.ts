@@ -30,3 +30,38 @@ export type NotionBlock = {
     };
   };
 }[];
+
+export type AllTimeType = {
+  text: string;
+  daily_average: number;
+  range: {
+    start_date: string;
+    end_text: string;
+    end_date: string;
+  };
+};
+
+export type WakaStatsType = {
+  total_seconds: number;
+  name: string;
+  percent: number;
+  digital: string;
+  decimal: string;
+  text: string;
+  hours: number;
+  minutes: number;
+  human_readable_daily_average_including_other_language: string;
+  best_day: {
+    date: string;
+    text: string;
+  };
+  grand_total: {
+    text: string;
+  };
+};
+
+export type WakaInsightsType = {
+  categories: [];
+  date: string;
+  total: number;
+};

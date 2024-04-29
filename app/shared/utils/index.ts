@@ -44,6 +44,20 @@ export const isPageObjectResponse = (page: any): page is NotionBlock => {
   return basicCheck && hasName;
 };
 
-export default function parsingEmoji(emoji: string) {
+export function parsingEmoji(emoji: string) {
   return twemoji.parse(emoji);
 }
+
+export const getTime = () => {
+  const today = new Date();
+  const yesterday = new Date(today);
+
+  yesterday.setDate(today.getDate() - 1);
+
+  const formatDate = (date: Date) => date.toISOString().split("T")[0];
+
+  return {
+    yesterday: formatDate(yesterday),
+    today: formatDate(today),
+  };
+};

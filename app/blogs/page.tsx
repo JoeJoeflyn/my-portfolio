@@ -2,6 +2,14 @@ import { getNotionPage } from "@/app/api/notion";
 import { dateFormate } from "../shared/utils";
 import Link from "next/link";
 
+export async function generateMetadata() {
+  return {
+    title: "Blogs - Nguyen Thai Tai",
+    description:
+      " All of my cool and useful websites that i have collected to share with you.",
+  };
+}
+
 export default async function Page() {
   const { results: parentPages } = await getNotionPage();
 
