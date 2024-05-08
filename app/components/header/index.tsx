@@ -1,13 +1,17 @@
 "use client";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
   const [loaded, setLoaded] = React.useState(false);
+  const pathname = usePathname();
+
   React.useEffect(() => {
     setLoaded(true);
   }, [setLoaded]);
+
   return (
     <nav className="relative px-4 sm:px-8 lg:px-12">
       <div className="m-6 dark:text-[#f4f4f5] pointer-events-auto hidden md:block">
@@ -18,34 +22,61 @@ export default function Header() {
               <div>
                 <a
                   href="/"
-                  className="relative block px-3 py-2 transition text-teal-500 dark:text-teal-400"
+                  className={`relative block px-3 py-2 transition hover:text-teal-500 ${
+                    pathname === "/" ? "text-teal-500" : ""
+                  } dark:hover:text-teal-400`}
                 >
                   About
-                  <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0"></span>
+                  {pathname === "/" ? (
+                    <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0"></span>
+                  ) : (
+                    ""
+                  )}
                 </a>
               </div>
               <div>
                 <a
-                  href="#"
-                  className="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400"
+                  href="/projects"
+                  className={`relative block px-3 py-2 transition hover:text-teal-500 ${
+                    pathname === "/projects" ? "text-teal-500" : ""
+                  } dark:hover:text-teal-400`}
                 >
-                  Project
+                  Projects
+                  {pathname === "/projects" ? (
+                    <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0"></span>
+                  ) : (
+                    ""
+                  )}
                 </a>
               </div>
               <div>
                 <a
                   href="/blogs"
-                  className="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400"
+                  className={`relative block px-3 py-2 transition hover:text-teal-500 ${
+                    pathname === "/blogs" ? "text-teal-500" : ""
+                  } dark:hover:text-teal-400`}
                 >
                   Blogs
+                  {pathname === "/blogs" ? (
+                    <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0"></span>
+                  ) : (
+                    ""
+                  )}
                 </a>
               </div>
               <div>
                 <a
                   href="/waka-time"
-                  className="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400"
+                  className={`relative block px-3 py-2 transition hover:text-teal-500 ${
+                    pathname === "/waka-time" ? "text-teal-500" : ""
+                  } dark:hover:text-teal-400`}
                 >
                   WakaTime
+                  {pathname === "/waka-time" ? (
+                    <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0"></span>
+                  ) : (
+                    ""
+                  )}
                 </a>
               </div>
             </div>

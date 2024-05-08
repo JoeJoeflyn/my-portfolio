@@ -46,10 +46,14 @@ export function renderBlock(block: any) {
     }
     case "numbered_list": {
       return (
-        <ol className="my-2">
-          {value.children.map((child: any) => (
-            <React.Fragment key={child.id}>{renderBlock(child)}</React.Fragment>
-          ))}
+        <ol className="my-2 list-decimal">
+          <li>
+            {value.children.map((child: any) => (
+              <React.Fragment key={child.id}>
+                {renderBlock(child)}
+              </React.Fragment>
+            ))}
+          </li>
         </ol>
       );
     }

@@ -56,36 +56,40 @@ export default function Blog({
                   <header className="flex flex-col">
                     <div className="relative my-6 group">
                       <div className="absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
-                        {isReposition ? (
-                          <div className="flex items-center rounded">
-                            <div
-                              onClick={() => setIsReposition((prev) => !prev)}
-                              role="button"
-                              tabIndex={0}
-                              className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded-s bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
-                            >
-                              Save position
+                        {"cover" in heading && heading?.cover ? (
+                          isReposition ? (
+                            <div className="flex items-center rounded">
+                              <div
+                                onClick={() => setIsReposition((prev) => !prev)}
+                                role="button"
+                                tabIndex={0}
+                                className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded-s bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
+                              >
+                                Save position
+                              </div>
+                              <div
+                                onClick={() => setIsReposition((prev) => !prev)}
+                                role="button"
+                                tabIndex={0}
+                                className="user-select-none transition-background duration-20 ease-in cursor-pointer flex items-center justify-center px-1.5 py-1 rounded-e bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
+                              >
+                                Cancel
+                              </div>
                             </div>
-                            <div
-                              onClick={() => setIsReposition((prev) => !prev)}
-                              role="button"
-                              tabIndex={0}
-                              className="user-select-none transition-background duration-20 ease-in cursor-pointer flex items-center justify-center px-1.5 py-1 rounded-e bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
-                            >
-                              Cancel
+                          ) : (
+                            <div className="flex items-center rounded">
+                              <div
+                                onClick={() => setIsReposition((prev) => !prev)}
+                                role="button"
+                                tabIndex={0}
+                                className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
+                              >
+                                Reposition
+                              </div>
                             </div>
-                          </div>
+                          )
                         ) : (
-                          <div className="flex items-center rounded">
-                            <div
-                              onClick={() => setIsReposition((prev) => !prev)}
-                              role="button"
-                              tabIndex={0}
-                              className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
-                            >
-                              Reposition
-                            </div>
-                          </div>
+                          ""
                         )}
                       </div>
                       <div
@@ -103,10 +107,12 @@ export default function Blog({
                             ref={imageRef}
                             src={
                               "external" in heading?.cover! &&
-                              "url" in heading?.cover?.external &&
                               heading?.cover?.external?.url
                                 ? heading.cover.external.url
-                                : undefined // Fallback to undefined if false
+                                : "file" in heading?.cover! &&
+                                  heading?.cover?.file?.url
+                                ? heading.cover.file.url
+                                : undefined
                             }
                             draggable="false"
                             alt="Guillotined"

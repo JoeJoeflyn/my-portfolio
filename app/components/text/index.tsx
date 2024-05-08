@@ -30,7 +30,12 @@ export default function Text({ title }: { title: any[] }) {
             key={`${text.content}-${index}`}
           >
             {text.link ? (
-              <Link href={text.link.url}>{text.content}</Link>
+              <Link
+                className="hover:text-[rgb(45,212,191)]"
+                href={text.link.url}
+              >
+                {text.content}
+              </Link>
             ) : (
               text.content
             )}
