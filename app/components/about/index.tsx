@@ -21,8 +21,8 @@ export default function About({
   )[];
 }) {
   return (
-    <div className="relative px-4 sm:px-8 lg:px-12">
-      <div className="mt-14 relative px-4 sm:px-8 lg:px-12">
+    <div className="relative px-4 mt-14 sm:px-8 lg:px-12">
+      <div className="relative md:px-4 sm:px-8 lg:px-12">
         {/* image avatar */}
         <ProfileSection />
         {/* intro */}
@@ -30,10 +30,14 @@ export default function About({
         {/* marquee */}
         <Marquee />
         {/* Body */}
-        <div className="grid grid-cols-2 px-8 md:mt-16 border-t border-zinc-100 pt-10 pb-16 dark:border-zinc-700/40">
-          <BlogSection parentPages={parentPages} />
-          <div className="lg:pl-16 xl:pl-24">
-            <Career />
+        <div className="mx-auto max-w-7xl mt-24 md:mt-28">
+          <div className="relative">
+            <div className="mx-auto max-w-2xl lg:max-w-5xl">
+              <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
+                <BlogSection parentPages={parentPages} />
+                <Career />
+              </div>
+            </div>
           </div>
         </div>
       </div>

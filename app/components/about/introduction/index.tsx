@@ -3,17 +3,18 @@ import React from "react";
 
 export default function Introduction() {
   return (
-    <div className="grid grid-cols-5 mt-9">
+    <div className="grid grid-cols-1 md:grid-cols-5 mt-9">
       <div className="col-span-3">
         <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
           Fresher.
         </h1>
         <p className="mt-6 text-base leading-7 text-zinc-600 dark:text-zinc-400">
-          Bonjour! I&apos;m Tai Nguyen, Juicer 21 years old, student of web
-          development at FPT PolyTechnic College of CanTho, now living in HCM
-          city. I enjoy reading comics and manga, playing games and sports,
-          listening US-UK&apos;s song and news. It&apos;s very nice to meet
-          y&apos;all 🖤.
+          Bonjour! My name is Tai Nguyen. I&apos;m a 21-year-old web development
+          student at FPT Polytechnic College in Can Tho, currently residing in
+          Ho Chi Minh City. Outside of my studies, I have a passion for comics
+          and manga, enjoy playing games and sports, and stay informed by
+          listening to news and music from the US and UK. It&apos;s a pleasure
+          to meet you all 🖤!
         </p>
         <div className="mt-6 flex gap-6">
           <Link href="#">

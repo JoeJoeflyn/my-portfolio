@@ -19,19 +19,19 @@ export default function BlogSection({
   )[];
 }) {
   return (
-    <article className="flex flex-col gap-16">
+    <div className="flex flex-col gap-16">
       {parentPages?.map((page, index) => {
         if (!isPageObjectResponse(page)) return null;
         return (
-          <div
+          <article
             key={page?.id}
             className="group relative flex flex-col items-start"
           >
             <h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-              <div className="absolute -inset-y-6 -inset-x-4 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-zinc-800/50 sm:-inset-x-6 sm:rounded-2xl"></div>
+              <div className="absolute -inset-y-6 -inset-x-4 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-zinc-800/50 sm:-inset-x-6 sm:rounded-2xl"></div>
               <Link href={`/blogs/${page?.id}`}>
-                <span className="absolute -inset-y-6 -inset-x-4 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
-                <span className="relative z-10">
+                <span className="absolute -inset-y-6 -inset-x-4 sm:-inset-x-6 sm:rounded-2xl"></span>
+                <span className="relative">
                   {"properties" in page &&
                     page.properties.Name &&
                     page.properties.Name.type === "title" &&
@@ -42,7 +42,7 @@ export default function BlogSection({
               </Link>
             </h2>
             <time
-              className="relative z-10 order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500 pl-3.5"
+              className="relative order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500 pl-3.5"
               dateTime={dateFormate(
                 "created_time" in page ? (page?.created_time as string) : ""
               )}
@@ -59,7 +59,7 @@ export default function BlogSection({
             <Link
               href={`/blogs/${page?.id}`}
               aria-hidden="true"
-              className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
+              className="relative mt-4 flex items-center text-sm font-medium text-teal-500"
             >
               Read article
               <svg
@@ -70,15 +70,15 @@ export default function BlogSection({
               >
                 <path
                   d="M6.75 5.75 9.25 8l-2.5 2.25"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 ></path>
               </svg>
             </Link>
-          </div>
+          </article>
         );
       })}
-    </article>
+    </div>
   );
 }

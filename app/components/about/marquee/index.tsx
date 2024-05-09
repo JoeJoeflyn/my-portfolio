@@ -4,7 +4,7 @@ import React from "react";
 export default function Marquee() {
   return (
     <div className="flex flex-col gap-3 mt-24 md:mt-28">
-      <div className="w-full inline-flex gap-5 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
+      <div className="w-full inline-flex py-2 gap-5 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
         <ul className="flex items-center gap-5 whitespace-nowrap justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll-right">
           {TechLogoHeaven.map((item, index) => (
             <div
@@ -31,7 +31,7 @@ export default function Marquee() {
           ))}
         </ul>
       </div>
-      <div className="w-full inline-flex gap-5 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
+      <div className="w-full inline-flex py-2 gap-5 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
         <ul className="flex items-center gap-5 whitespace-nowrap justify-center md:justify-start [&_li]:mx-8 [&_img]:max-w-none animate-infinite-scroll-left">
           {TechLogoHell.map((item, index) => (
             <div
