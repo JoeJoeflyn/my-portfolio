@@ -1,7 +1,8 @@
+import { marked } from "marked";
 import Image from "next/image";
 import React from "react";
 
-export default function Career() {
+export default function Career({ githubReadme }: { githubReadme: string }) {
   return (
     <div className="lg:pl-16 xl:pl-24">
       <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
@@ -120,6 +121,12 @@ export default function Career() {
             </dl>
           </li>
         </ol>
+      </div>
+      <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40 my-5">
+        <div
+          className="w-full"
+          dangerouslySetInnerHTML={{ __html: marked(githubReadme) }}
+        />
       </div>
     </div>
   );

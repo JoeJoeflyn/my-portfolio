@@ -6,6 +6,7 @@ import {
 } from "@notionhq/client/build/src/api-endpoints";
 import { getNotionPage } from "./api/notion";
 import About from "./components/about";
+import { getGithub } from "./api/github";
 
 export async function generateMetadata() {
   return {
@@ -16,6 +17,7 @@ export async function generateMetadata() {
 
 export default async function Home() {
   const { results: parentPages } = await getNotionPage();
+  const githubReadme = (await getGithub()) as string;
 
   return (
     <About
@@ -27,6 +29,7 @@ export default async function Home() {
           | DatabaseObjectResponse
         )[]
       }
+      githubReadme={githubReadme}
     />
   );
 }
