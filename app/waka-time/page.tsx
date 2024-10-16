@@ -4,13 +4,11 @@ import {
   getStats,
   getSummaries,
 } from "../api/wakatime";
-import AllTime from "../components/waka-time/allTime";
-import BestDay from "../components/waka-time/bestDay";
-import CalendarHeatmapComponent from "../components/waka-time/calendarHeatmap";
+import CalendarHeatmapComponent from "../components/calendar-heat-map";
+import StatsCard from "../components/stat-card";
 import Category from "../components/waka-time/category";
 import Editor from "../components/waka-time/editor";
 import Languages from "../components/waka-time/language";
-import LastSevenDays from "../components/waka-time/lastSevenDays";
 import OperatingSystem from "../components/waka-time/operatingSystem";
 
 export async function generateMetadata() {
@@ -29,6 +27,27 @@ export default async function Page() {
       getInsights(),
     ]);
 
+  const dailyAverage = `${Math.floor(
+    getWakaAllTime.daily_average / 3600
+  )} hrs ${Math.floor(
+    (getWakaAllTime.daily_average % 3600) / 60
+  )} mins per day`;
+
+  const lastSevenDays =
+    getWakaStats?.human_readable_daily_average_including_other_language ||
+    getWakaStats?.grand_total.text ||
+    "";
+
+  const wakaSummary = `Daily Average: ${
+    getWakaSummaries[0]
+      ?.human_readable_daily_average_including_other_language ||
+    getWakaSummaries[0]?.grand_total.text ||
+    ""
+  } mins per day`;
+
+  const bestDayDescription = `Most Active Day: ${getWakaStats?.best_day?.date}`;
+  const bestDayStats = `with ${getWakaStats?.best_day?.text} of activity`;
+
   return (
     <div className="sm:px-8 mt-16 sm:mt-32">
       <div className="mx-auto max-w-7xl lg:px-8">
@@ -44,20 +63,31 @@ export default async function Page() {
                 </p>
               </header>
               <div className="md:mt-16 mt-20">
-                <ul
-                  role="list"
-                  className="grid md:grid-cols-2 gap-x-8 gap-y-8 grid-cols-1"
-                >
-                  <AllTime getWakaAllTime={getWakaAllTime} />
-                  <LastSevenDays getWakaStats={getWakaStats} />
-                  <BestDay getWakaStats={getWakaStats} />
+                <div className="grid md:grid-cols-2 gap-x-8 gap-y-8 grid-cols-1">
+                  <StatsCard
+                    title="All time coding"
+                    description={`Coded ${getWakaAllTime.text} last year`}
+                    stats={dailyAverage}
+                    rangeStartDate={getWakaAllTime.range.start_date}
+                    rangeEndDate={getWakaAllTime.range.end_text}
+                  />
+                  <StatsCard
+                    title="Last 7 days"
+                    description="Daily Average"
+                    stats={lastSevenDays}
+                  />
+                  <StatsCard
+                    title="Best Day"
+                    description={bestDayDescription}
+                    stats={bestDayStats}
+                  />
                   <OperatingSystem
                     operatingSystems={getWakaStats.operating_systems}
                   />
                   <Category categories={getWakaStats.categories} />
                   <Editor editors={getWakaStats.editors} />
                   <Languages languages={getWakaStats.languages} />
-                </ul>
+                </div>
               </div>
               <div className="md:mt-16 mt-20">
                 <header className="max-w-2xl md:mb-16 mb-20">
@@ -75,18 +105,19 @@ export default async function Page() {
                 </h1>
               </header>
               <div className="md:mt-16 mt-20">
-                <ul
-                  role="list"
-                  className="grid md:grid-cols-2 gap-x-8 gap-y-8 grid-cols-1"
-                >
-                  <LastSevenDays getWakaStats={getWakaSummaries[0]} />
+                <div className="grid md:grid-cols-2 gap-x-8 gap-y-8 grid-cols-1">
+                  <StatsCard
+                    title="Daily Average"
+                    description="Daily Average"
+                    stats={wakaSummary}
+                  />
                   <OperatingSystem
                     operatingSystems={getWakaSummaries[1].operating_systems}
                   />
                   <Category categories={getWakaSummaries[1].categories} />
                   <Editor editors={getWakaSummaries[1].editors} />
                   <Languages languages={getWakaSummaries[1].languages} />
-                </ul>
+                </div>
               </div>
             </>
           </div>

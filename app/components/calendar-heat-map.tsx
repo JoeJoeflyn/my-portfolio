@@ -2,7 +2,7 @@
 import { WakaInsightsType } from "@/app/shared/interface";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import "../../../globals.css";
+import "../globals.css";
 export default function CalendarHeatmapComponent({
   days,
 }: {

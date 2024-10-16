@@ -7,7 +7,7 @@ export default function OperatingSystem({
   operatingSystems: WakaStatsType[];
 }) {
   return (
-    <li className="group relative flex flex-col items-start">
+    <div className="group relative flex flex-col items-start">
       <div className="rounded-2xl w-full h-full border border-zinc-100 p-6 dark:border-zinc-700/40">
         <h2 className="flex items-center text-sm font-semibold text-zinc-900 dark:text-zinc-100">
           <svg
@@ -27,26 +27,24 @@ export default function OperatingSystem({
           </svg>
           <span className="ml-3">Operating systems</span>
         </h2>
-        <ol className="mt-4">
-          <div className="flex">
-            <div className="w-full flex flex-col gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {operatingSystems?.map(
-                (operating: WakaStatsType, index: number) => (
-                  <div key={index} className="grid grid-cols-5 items-baseline">
-                    <div className="whitespace-nowrap">{operating.name}:</div>
-                    <ProgressBar
-                      text={operating.text}
-                      label={operating.name}
-                      score={operating.percent}
-                    />
-                    <div>{operating.percent}%</div>
-                  </div>
-                )
-              )}
+        <div className="mt-4">
+          {operatingSystems?.map((operating: WakaStatsType, index: number) => (
+            <div key={index} className="flex">
+              <div className="w-full flex flex-col gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                <div className="grid grid-cols-5 items-baseline">
+                  <div className="whitespace-nowrap">{operating.name}:</div>
+                  <ProgressBar
+                    text={operating.text}
+                    label={operating.name}
+                    score={operating.percent}
+                  />
+                  <div>{operating.percent}%</div>
+                </div>
+              </div>
             </div>
-          </div>
-        </ol>
+          ))}
+        </div>
       </div>
-    </li>
+    </div>
   );
 }

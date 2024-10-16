@@ -12,7 +12,12 @@ export async function generateMetadata() {
 
 export default async function Page() {
   return (
-    <div className="sm:px-8 mt-16 sm:mt-32 h-screen">
+    <div
+      className="sm:px-8 mt-16 sm:my-32"
+      style={{
+        height: "calc(100vh - 505px)",
+      }}
+    >
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="relative px-4 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-2xl lg:max-w-5xl">
@@ -31,7 +36,7 @@ export default async function Page() {
                 className="grid grid-cols-1 gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
               >
                 <li className="group relative flex flex-col items-start">
-                  <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                  <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:bg-zinc-700 dark:shadow-zinc-900/10 dark:ring-zinc-600">
                     <div className="dark:hidden relative">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +116,7 @@ export default async function Page() {
                   </p>
                 </li>
                 <li className="group relative flex flex-col items-start">
-                  <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                  <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:bg-zinc-700 dark:shadow-zinc-900/10 dark:ring-zinc-600">
                     <div className="dark:hidden relative">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -263,7 +268,7 @@ export default async function Page() {
                   </p>
                 </li>
                 <li className="group relative flex flex-col items-start">
-                  <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                  <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:bg-zinc-700 dark:shadow-zinc-900/10 dark:ring-zinc-600">
                     <div className="dark:hidden relative">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

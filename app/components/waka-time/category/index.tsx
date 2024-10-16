@@ -8,7 +8,7 @@ export default function Category({
   categories: WakaStatsType[];
 }) {
   return (
-    <li className="group relative flex flex-col items-start">
+    <div className="group relative flex flex-col items-start">
       <div className="rounded-2xl w-full h-full border border-zinc-100 p-6 dark:border-zinc-700/40">
         <h2 className="flex items-center text-sm font-semibold text-zinc-900 dark:text-zinc-100">
           <svg
@@ -28,7 +28,7 @@ export default function Category({
           </svg>
           <span className="ml-3">Operating systems</span>
         </h2>
-        <ol className="mt-4">
+        <div className="mt-4">
           <div className="flex">
             <div className="w-full flex flex-col gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
               {categories?.map((operating: WakaStatsType, index: number) => (
@@ -44,8 +44,8 @@ export default function Category({
               ))}
             </div>
           </div>
-        </ol>
+        </div>
       </div>
-    </li>
+    </div>
   );
 }

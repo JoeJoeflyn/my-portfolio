@@ -3,7 +3,7 @@ import ProgressBar from "../progressBar";
 
 export default function Editor({ editors }: { editors: WakaStatsType[] }) {
   return (
-    <li className="group relative flex flex-col items-start">
+    <div className="group relative flex flex-col items-start">
       <div className="rounded-2xl w-full h-full border border-zinc-100 p-6 dark:border-zinc-700/40">
         <h2 className="flex items-center text-sm font-semibold text-zinc-900 dark:text-zinc-100">
           <svg
@@ -23,7 +23,7 @@ export default function Editor({ editors }: { editors: WakaStatsType[] }) {
           </svg>
           <span className="ml-3">Editors</span>
         </h2>
-        <ol className="mt-4">
+        <div className="mt-4">
           <div className="flex">
             <div className="w-full flex flex-col gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
               {editors?.map((operating: WakaStatsType, index: number) => (
@@ -39,8 +39,8 @@ export default function Editor({ editors }: { editors: WakaStatsType[] }) {
               ))}
             </div>
           </div>
-        </ol>
+        </div>
       </div>
-    </li>
+    </div>
   );
 }

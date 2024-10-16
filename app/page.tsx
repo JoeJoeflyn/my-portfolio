@@ -221,14 +221,25 @@ export default async function Home() {
                             </dd>
                             <dt className="sr-only">Date</dt>
                             <dd
-                              className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
+                              className="ml-auto text-xs"
                               aria-label={`${item.dateStart} until ${item.dateEnd}`}
                             >
-                              <time dateTime={item.dateStart}>
+                              <time
+                                dateTime={item.dateStart}
+                                className="text-zinc-200 dark:dark:text-zinc-100"
+                              >
                                 {item.dateStart}
-                              </time>{" "}
-                              <span aria-hidden="true">—</span>{" "}
-                              <time dateTime={item.dateEnd}>
+                              </time>
+                              <span
+                                className="text-zinc-200 dark:dark:text-zinc-100"
+                                aria-hidden="true"
+                              >
+                                —
+                              </span>
+                              <time
+                                dateTime={item.dateEnd}
+                                className="text-zinc-200 dark:dark:text-zinc-100"
+                              >
                                 {item.dateEnd}
                               </time>
                             </dd>

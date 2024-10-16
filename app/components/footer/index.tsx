@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mt-32 border-t border-zinc-100 dark:border-zinc-700/40">
+    <footer className="border-t border-zinc-100 dark:border-zinc-700/40">
       <div className="relative px-4 sm:px-8 lg:px-12">
         <div className="sm:px-8">
           <div className="mx-auto max-w-7xl">
@@ -37,7 +37,7 @@ export default function Footer() {
                         WakaTime
                       </Link>
                     </div>
-                    <p className="text-sm text-zinc-400 dark:text-zinc-500">
+                    <p className="text-sm text-zinc-200 dark:text-zinc-100">
                       © 2024 Nguyen Thai Tai. All rights reserved.
                     </p>
                   </div>
