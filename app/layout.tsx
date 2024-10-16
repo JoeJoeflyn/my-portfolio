@@ -5,23 +5,90 @@ import Header from "./components/header";
 import "./globals.css";
 import { Providers } from "./providers/providers";
 
-export const metadata: Metadata = {
+// export const metadata: Metadata = {
+//   title: "Nguyen Thai Tai",
+//   description: "Nguyen Thai Tai Portfolio",
+//   icons: {
+//     icon: "/icon.ico",
+//   },
+//   verification: {
+//     google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",
+//   },
+//   robots: {
+//     index: true,
+//     googleBot: {
+//       notranslate: true,
+//       nositelinkssearchbox: true,
+//     },
+//   },
+// };
+
+const baseMetadata = {
   title: "Nguyen Thai Tai",
   description: "Nguyen Thai Tai Portfolio",
-  icons: {
-    icon: "/icon.ico",
-  },
-  verification: {
-    google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",
-  },
-  robots: {
-    index: true,
-    googleBot: {
-      notranslate: true,
-      nositelinkssearchbox: true,
-    },
-  },
+  applicationName: "Nguyen Thai Tai Portfolio",
+  authors: [{ name: "Nguyen Thai Tai Portfolio" }],
+  keywords: [
+    "Nguyen Thai Tai",
+    "portfolio",
+    "software engineer",
+    "web developer",
+    "frontend developer",
+    "backend developer",
+    "full-stack developer",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "NestJS",
+    "Mongoose",
+    "Prisma",
+    "responsive design",
+    "UI/UX design",
+    "API development",
+  ],
+  generator: "Nguyen Thai Tai Portfolio",
+  creator: "Nguyen Thai Tai Portfolio",
+  publisher: "Nguyen Thai Tai Portfolio",
 };
+
+// Dynamic metadata generation
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    ...baseMetadata,
+    title: {
+      default: baseMetadata.title,
+      template: `%s | ${baseMetadata.title}`,
+    },
+    openGraph: {
+      title: baseMetadata.title,
+      description: baseMetadata.description,
+      url: "https://my-portfolio-phszk6pql-joejoeflyns-projects.vercel.app/",
+      siteName: baseMetadata.title,
+      images: ["/images/kurumi-hehe.png"],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: baseMetadata.title,
+      description: baseMetadata.description,
+      images: ["/images/kurumi-hehe.png"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+  };
+}
 
 export default function RootLayout({
   children,
