@@ -35,14 +35,15 @@ export default function ProfileSection() {
     <div
       className={`${
         navbarSticky
-          ? "sticky top-5 md:top-5 z-10 pt-6 transition-all duration-75 ease-in-out h-10 w-10"
+          ? "sticky top-5 md:top-5 z-10 transition-all duration-75 ease-in-out h-10 w-10"
           : "relative h-16 w-16"
-      }`}
+      } rounded-full overflow-hidden`}
     >
       <Image
-        fill={true}
         src="/images/avatar.jpg"
         alt="Avatar"
+        width={128}
+        height={128}
         className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
       />
     </div>

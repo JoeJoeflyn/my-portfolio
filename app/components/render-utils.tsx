@@ -1,4 +1,4 @@
-import { CodeBlock } from "@/app/components/codeBlock";
+import { CodeBlock } from "@/app/components/code-block";
 import FaviconDisplay from "@/app/components/favIcon";
 import Text from "@/app/components/text";
 import "highlight.js/styles/github.css";

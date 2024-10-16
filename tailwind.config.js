@@ -8,19 +8,16 @@ module.exports = {
   ],
   theme: {
     extend: {
-      animation: {
-        "infinite-scroll-right": "infinite-scroll-left 25s linear infinite",
-        "infinite-scroll-left": "infinite-scroll-right 25s linear infinite",
-      },
       keyframes: {
-        "infinite-scroll-left": {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-100%)" },
+        scroll: {
+          to: {
+            transform: "translate(calc(-50% - 0.5rem))",
+          },
         },
-        "infinite-scroll-right": {
-          from: { transform: "translateX(-100%)" },
-          to: { transform: "translateX(0)" },
-        },
+      },
+      animation: {
+        scroll:
+          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       },
     },
   },

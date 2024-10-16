@@ -5,7 +5,7 @@ import {
   dateFormate,
   isBlockObjectResponse,
 } from "@/app/shared/utils";
-import { renderBlock } from "@/app/shared/utils/renderUtils";
+import { renderBlock } from "@/app/components/render-utils";
 import {
   BlockObjectResponse,
   GetPageResponse,
