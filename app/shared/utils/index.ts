@@ -5,6 +5,12 @@ import {
 } from "@notionhq/client/build/src/api-endpoints";
 import twemoji from "twemoji";
 import { NotionBlock } from "../interface";
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const dateFormate = (date: string) => {
   return new Date(date).toLocaleDateString("en-US", {
