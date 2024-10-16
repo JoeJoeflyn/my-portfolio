@@ -76,6 +76,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description: baseMetadata.description,
       images: ["/images/kurumi-hehe.png"],
     },
+    verification: {
+      google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",
+    },
     robots: {
       index: true,
       follow: true,
