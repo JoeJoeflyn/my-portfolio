@@ -14,7 +14,7 @@ export default async function Page() {
   const { results: parentPages } = await getNotionPage();
 
   return (
-    <div className="sm:px-8 mt-16 sm:mt-32">
+    <div className="sm:px-8 mt-16 sm:my-32">
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="relative px-4 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-2xl lg:max-w-5xl">
@@ -63,7 +63,7 @@ export default async function Page() {
                           </time>
                           <Link
                             href={`/blogs/${page?.id}`}
-                            aria-hidden="true"
+                            aria-label="Read article"
                             className="relative mt-4 flex items-center text-sm font-medium text-teal-500"
                           >
                             Read article
@@ -82,9 +82,22 @@ export default async function Page() {
                             </svg>
                           </Link>
                         </div>
-                        <time className="mt-1 md:block hidden order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500">
+                        <time
+                          className="relative order-first mb-3 flex items-center text-sm text-zinc-700 dark:text-zinc-300 pl-3.5"
+                          dateTime={dateFormate(
+                            "created_time" in page
+                              ? (page?.created_time as string)
+                              : ""
+                          )}
+                        >
+                          <span
+                            className="absolute inset-y-0 left-0 flex items-center"
+                            aria-hidden="true"
+                          >
+                            <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-400"></span>
+                          </span>
                           {"created_time" in page &&
-                            dateFormate(page?.created_time)}
+                            dateFormate(page?.created_time as string)}
                         </time>
                       </article>
                     );

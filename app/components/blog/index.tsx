@@ -27,7 +27,12 @@ export default function Blog({
     useDraggable(containerRef, imageRef);
 
   return (
-    <div className="sm:px-8 mt-16 lg:mt-32">
+    <div
+      style={{
+        height: "calc(100vh - 377px)",
+      }}
+      className="sm:px-8 mt-16 lg:mt-32"
+    >
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="relative px-4 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-2xl lg:max-w-5xl">
@@ -59,38 +64,33 @@ export default function Blog({
                         {"cover" in heading && heading?.cover ? (
                           isReposition ? (
                             <div className="flex items-center rounded">
-                              <div
+                              <button
                                 onClick={() => setIsReposition((prev) => !prev)}
-                                role="button"
-                                tabIndex={0}
+                                aria-label="Save position"
                                 className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded-s bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
                               >
                                 Save position
-                              </div>
-                              <div
+                              </button>
+                              <button
                                 onClick={() => setIsReposition((prev) => !prev)}
-                                role="button"
-                                tabIndex={0}
+                                aria-label="Cancel repositioning"
                                 className="user-select-none transition-background duration-20 ease-in cursor-pointer flex items-center justify-center px-1.5 py-1 rounded-e bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
                               >
                                 Cancel
-                              </div>
+                              </button>
                             </div>
                           ) : (
                             <div className="flex items-center rounded">
-                              <div
+                              <button
                                 onClick={() => setIsReposition((prev) => !prev)}
-                                role="button"
-                                tabIndex={0}
+                                aria-label="Reposition"
                                 className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
                               >
                                 Reposition
-                              </div>
+                              </button>
                             </div>
                           )
-                        ) : (
-                          ""
-                        )}
+                        ) : null}
                       </div>
                       <div
                         className={`overflow-hidden ${
@@ -155,10 +155,7 @@ export default function Blog({
                           heading?.properties?.Name?.title[0]?.plain_text
                         : "Untitled"}
                     </h1>
-                    <time
-                      dateTime="2024-01-01"
-                      className="order-first flex items-center text-base text-zinc-400 dark:text-zinc-500"
-                    >
+                    <time className="order-first flex items-center text-base text-zinc-200 dark:text-zinc-100">
                       <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500" />
                       <span className="ml-3">
                         {"created_time" in heading &&

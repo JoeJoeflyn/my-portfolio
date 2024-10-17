@@ -1,12 +1,12 @@
-import React from "react";
-import ProgressBar from "../progressBar";
 import { WakaStatsType } from "@/app/shared/interface";
+import ProgressBar from "./progress-bar";
 
-export default function Languages({
-  languages,
-}: {
-  languages: WakaStatsType[];
-}) {
+interface ChartBar {
+  title: string;
+  data: WakaStatsType[];
+}
+
+export default function ChartBar({ title, data }: ChartBar) {
   return (
     <div className="group relative flex flex-col items-start">
       <div className="rounded-2xl w-full h-full border border-zinc-100 p-6 dark:border-zinc-700/40">
@@ -26,21 +26,20 @@ export default function Languages({
               className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
             />
           </svg>
-          <span className="ml-3">Languages</span>
+          <span className="ml-3">{title}</span>
         </h2>
         <div className="mt-4">
           <div className="flex">
             <div className="w-full flex flex-col gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {languages?.map((operating: WakaStatsType, index: number) => (
+              {data?.map((item: WakaStatsType, index: number) => (
                 <div key={index} className="grid grid-cols-5 items-baseline">
-                  <div className="whitespace-nowrap">{operating.name}:</div>
+                  <div className="whitespace-nowrap">{item.name}:</div>
                   <ProgressBar
-                    key={index}
-                    label={operating.name}
-                    text={operating.text}
-                    score={operating.percent}
+                    label={item.name}
+                    text={item.text}
+                    score={item.percent}
                   />
-                  <div>{operating.percent}%</div>
+                  <div>{item.percent}%</div>
                 </div>
               ))}
             </div>

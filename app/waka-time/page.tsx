@@ -1,15 +1,20 @@
+import dynamic from "next/dynamic";
 import {
   getAllTime,
   getInsights,
   getStats,
   getSummaries,
 } from "../api/wakatime";
-import CalendarHeatmapComponent from "../components/calendar-heat-map";
 import StatsCard from "../components/stat-card";
-import Category from "../components/waka-time/category";
-import Editor from "../components/waka-time/editor";
-import Languages from "../components/waka-time/language";
-import OperatingSystem from "../components/waka-time/operatingSystem";
+const CalendarHeatmapComponent = dynamic(
+  () => import("../components/calendar-heat-map"),
+  {
+    ssr: false,
+  }
+);
+const ChartBar = dynamic(() => import("../components/chart-bar"), {
+  ssr: false,
+});
 
 export async function generateMetadata() {
   return {
@@ -81,12 +86,13 @@ export default async function Page() {
                     description={bestDayDescription}
                     stats={bestDayStats}
                   />
-                  <OperatingSystem
-                    operatingSystems={getWakaStats.operating_systems}
+                  <ChartBar
+                    title="Operating Systems"
+                    data={getWakaStats.operating_systems}
                   />
-                  <Category categories={getWakaStats.categories} />
-                  <Editor editors={getWakaStats.editors} />
-                  <Languages languages={getWakaStats.languages} />
+                  <ChartBar title="Categories" data={getWakaStats.categories} />
+                  <ChartBar title="Editors" data={getWakaStats.editors} />
+                  <ChartBar title="Languages" data={getWakaStats.languages} />
                 </div>
               </div>
               <div className="md:mt-16 mt-20">
@@ -111,12 +117,22 @@ export default async function Page() {
                     description="Daily Average"
                     stats={wakaSummary}
                   />
-                  <OperatingSystem
-                    operatingSystems={getWakaSummaries[1].operating_systems}
+                  <ChartBar
+                    title="Operating Systems"
+                    data={getWakaSummaries[1].operating_systems}
                   />
-                  <Category categories={getWakaSummaries[1].categories} />
-                  <Editor editors={getWakaSummaries[1].editors} />
-                  <Languages languages={getWakaSummaries[1].languages} />
+                  <ChartBar
+                    title="Categories"
+                    data={getWakaSummaries[1].categories}
+                  />
+                  <ChartBar
+                    title="Editors"
+                    data={getWakaSummaries[1].editors}
+                  />
+                  <ChartBar
+                    title="Languages"
+                    data={getWakaSummaries[1].languages}
+                  />
                 </div>
               </div>
             </>

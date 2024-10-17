@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 import { Tweet } from "react-tweet";
 
-export function renderBlock(block: any) {
+export function renderBlock(block: any): React.ReactNode {
   const { type, id } = block;
   const value = block[type];
 
@@ -39,7 +39,7 @@ export function renderBlock(block: any) {
       return (
         <ul className="my-2">
           {value.children.map((child: any) => (
-            <React.Fragment key={child.id}>{renderBlock(child)}</React.Fragment>
+            <li key={child.id}>{renderBlock(child)}</li>
           ))}
         </ul>
       );
@@ -290,7 +290,7 @@ export function renderBlock(block: any) {
   }
 }
 
-export function renderNestedList(blocks: any) {
+function renderNestedList(blocks: any) {
   const { type } = blocks;
   const value = blocks[type];
   if (!value) return null;

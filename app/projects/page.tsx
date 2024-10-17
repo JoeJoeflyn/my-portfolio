@@ -15,7 +15,7 @@ export default async function Page() {
     <div
       className="sm:px-8 mt-16 sm:my-32"
       style={{
-        height: "calc(100vh - 505px)",
+        height: "calc(100vh - 249px)",
       }}
     >
       <div className="mx-auto max-w-7xl lg:px-8">
