@@ -46,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: baseMetadata.title,
       description: baseMetadata.description,
-      url: "https://my-portfolio-phszk6pql-joejoeflyns-projects.vercel.app/",
+      url: "https://my-portfolio-three-sepia.vercel.app/",
       siteName: baseMetadata.title,
       images: ["/images/kurumi-hehe.png"],
       locale: "en_US",

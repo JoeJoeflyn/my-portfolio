@@ -1,18 +1,22 @@
 "use client";
 import useDraggable from "@/app/hooks/useDraggableImage";
 import {
-  parsingEmoji,
   dateFormate,
   isBlockObjectResponse,
+  parsingEmoji,
 } from "@/app/shared/utils";
-import { renderBlock } from "@/app/components/render-utils";
 import {
   BlockObjectResponse,
   GetPageResponse,
   PartialBlockObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+const RenderBlock = dynamic(() => import("@/app/components/render-utils"), {
+  ssr: false,
+});
 
 export default function Blog({
   heading,
@@ -27,12 +31,7 @@ export default function Blog({
     useDraggable(containerRef, imageRef);
 
   return (
-    <div
-      style={{
-        height: "calc(100vh - 377px)",
-      }}
-      className="sm:px-8 mt-16 lg:mt-32"
-    >
+    <div className="sm:px-8 mt-16 lg:mt-32">
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="relative px-4 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-2xl lg:max-w-5xl">
@@ -102,8 +101,8 @@ export default function Blog({
                         onMouseDown={handleMouseDown}
                       >
                         {"cover" in heading && heading?.cover !== null && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
+                          <Image
+                            priority
                             ref={imageRef}
                             src={
                               "external" in heading?.cover! &&
@@ -112,19 +111,16 @@ export default function Blog({
                                 : "file" in heading?.cover! &&
                                   heading?.cover?.file?.url
                                 ? heading.cover.file.url
-                                : undefined
+                                : ""
                             }
-                            draggable="false"
                             alt="Guillotined"
+                            draggable={false}
+                            fill
                             style={{
                               position: "absolute",
-                              top: `${
-                                isReposition ? translation : translation
-                              }px`,
-                              left: "50%",
-                              transform: "translateX(-50%)",
-                              cursor: isReposition ? "move" : "default",
+                              objectFit: "cover",
                             }}
+                            sizes="(max-width: 768px) 100vw, 672px"
                           />
                         )}
                       </div>
@@ -168,7 +164,7 @@ export default function Blog({
                       if (!isBlockObjectResponse(block)) return null;
                       return (
                         <React.Fragment key={block.id}>
-                          {renderBlock(block)}
+                          <RenderBlock block={block} />
                         </React.Fragment>
                       );
                     })}

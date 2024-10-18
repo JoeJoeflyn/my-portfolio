@@ -51,15 +51,23 @@ export default async function Page() {
                               </span>
                             </Link>
                           </h2>
-                          <time className="md:hidden relative order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500 pl-3.5">
+
+                          <time
+                            className="relative order-first mb-3 flex items-center text-sm text-zinc-700 dark:text-zinc-300 pl-3.5"
+                            dateTime={dateFormate(
+                              "created_time" in page
+                                ? (page?.created_time as string)
+                                : ""
+                            )}
+                          >
                             <span
                               className="absolute inset-y-0 left-0 flex items-center"
                               aria-hidden="true"
                             >
-                              <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500"></span>
+                              <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-400"></span>
                             </span>
                             {"created_time" in page &&
-                              dateFormate(page?.created_time)}
+                              dateFormate(page?.created_time as string)}
                           </time>
                           <Link
                             href={`/blogs/${page?.id}`}
@@ -82,23 +90,6 @@ export default async function Page() {
                             </svg>
                           </Link>
                         </div>
-                        <time
-                          className="relative order-first mb-3 flex items-center text-sm text-zinc-700 dark:text-zinc-300 pl-3.5"
-                          dateTime={dateFormate(
-                            "created_time" in page
-                              ? (page?.created_time as string)
-                              : ""
-                          )}
-                        >
-                          <span
-                            className="absolute inset-y-0 left-0 flex items-center"
-                            aria-hidden="true"
-                          >
-                            <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-400"></span>
-                          </span>
-                          {"created_time" in page &&
-                            dateFormate(page?.created_time as string)}
-                        </time>
                       </article>
                     );
                   })}

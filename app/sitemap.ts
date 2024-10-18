@@ -35,22 +35,22 @@ export async function generateStaticParams() {
 export default async function sitemap({ params }: { params: { id: string } }): Promise<MetadataRoute.Sitemap> {
   let staticRoutes = [
     {
-      url: `https://my-portfolio-pbiwtvvm8-joejoeflyns-projects.vercel.app/`,
+      url: `https://my-portfolio-three-sepia.vercel.app/`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `https://my-portfolio-pbiwtvvm8-joejoeflyns-projects.vercel.app/projects`,
+      url: `https://my-portfolio-three-sepia.vercel.app/projects`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `https://my-portfolio-pbiwtvvm8-joejoeflyns-projects.vercel.app/blogs`,
+      url: `https://my-portfolio-three-sepia.vercel.app/blogs`,
       lastModified: new Date(),
       priority: 0.8,
     },
     {
-      url: `https://my-portfolio-pbiwtvvm8-joejoeflyns-projects.vercel.app/waka-time`,
+      url: `https://my-portfolio-three-sepia.vercel.app/waka-time`,
       lastModified: new Date(),
       priority: 0.8,
     },
@@ -68,7 +68,7 @@ export default async function sitemap({ params }: { params: { id: string } }): P
     }
 
     const blogRoutes = heading.map((blog) => ({
-      url: `https://my-portfolio-pbiwtvvm8-joejoeflyns-projects.vercel.app/blogs/${blog.id}`,
+      url: `https://my-portfolio-three-sepia.vercel.app/blogs/${blog.id}`,
       lastModified: new Date(blog.created_time),
       priority: 0.8,
     }));

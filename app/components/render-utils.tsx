@@ -5,8 +5,9 @@ import "highlight.js/styles/github.css";
 import Link from "next/link";
 import React from "react";
 import { Tweet } from "react-tweet";
+import RenderNestedList from "./render-nested-list";
 
-export function renderBlock(block: any): React.ReactNode {
+export default function RenderBlock({ block }: any) {
   const { type, id } = block;
   const value = block[type];
 
@@ -39,7 +40,9 @@ export function renderBlock(block: any): React.ReactNode {
       return (
         <ul className="my-2">
           {value.children.map((child: any) => (
-            <li key={child.id}>{renderBlock(child)}</li>
+            <li key={child.id}>
+              <RenderBlock block={child} />
+            </li>
           ))}
         </ul>
       );
@@ -47,23 +50,25 @@ export function renderBlock(block: any): React.ReactNode {
     case "numbered_list": {
       return (
         <ol className="my-2 list-decimal">
-          <li>
-            {value.children.map((child: any) => (
-              <React.Fragment key={child.id}>
-                {renderBlock(child)}
-              </React.Fragment>
-            ))}
-          </li>
+          {value.children.map((child: any) => (
+            <React.Fragment key={child.id}>
+              <li key={child.id}>
+                <RenderBlock block={child} />
+              </li>
+            </React.Fragment>
+          ))}
         </ol>
       );
     }
     case "bulleted_list_item":
     case "numbered_list_item":
       return (
-        <li className="my-2" key={block.id}>
-          <Text title={value.rich_text} />
-          {!!value.children && renderNestedList(block)}
-        </li>
+        <ul>
+          <li className="my-2" key={block.id}>
+            <Text title={value.rich_text} />
+            {!!value.children && RenderNestedList(block)}
+          </li>
+        </ul>
       );
     case "to_do":
       return (
@@ -259,7 +264,7 @@ export function renderBlock(block: any): React.ReactNode {
         <div className="flex">
           {block.children.map((childBlock: any) => (
             <React.Fragment key={childBlock.id}>
-              {renderBlock(childBlock)}
+              {RenderBlock(childBlock)}
             </React.Fragment>
           ))}
         </div>
@@ -267,11 +272,15 @@ export function renderBlock(block: any): React.ReactNode {
     }
     case "column": {
       return (
-        <div>
+        <ul>
           {block.children.map((child: any) => (
-            <React.Fragment key={child.id}>{renderBlock(child)}</React.Fragment>
+            <React.Fragment key={child.id}>
+              <li key={child.id}>
+                <RenderBlock block={child} />
+              </li>
+            </React.Fragment>
           ))}
-        </div>
+        </ul>
       );
     }
     case "embed":
@@ -288,17 +297,4 @@ export function renderBlock(block: any): React.ReactNode {
         type === "unsupported" ? "unsupported by Notion API" : type
       })`;
   }
-}
-
-function renderNestedList(blocks: any) {
-  const { type } = blocks;
-  const value = blocks[type];
-  if (!value) return null;
-
-  const isNumberedList = value.children[0].type === "numbered_list_item";
-
-  if (isNumberedList) {
-    return <ol>{value.children.map((block: any) => renderBlock(block))}</ol>;
-  }
-  return <ul>{value.children.map((block: any) => renderBlock(block))}</ul>;
 }
