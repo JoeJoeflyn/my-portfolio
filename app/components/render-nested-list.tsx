@@ -1,8 +1,7 @@
 import dynamic from "next/dynamic";
 import React from "react";
-const RenderBlock = dynamic(() => import("./render-utils"), {
-  ssr: false,
-});
+const RenderBlock = dynamic(() => import("./render-utils"));
+
 export default function RenderNestedList(blocks: any) {
   const { type } = blocks;
   const value = blocks[type];

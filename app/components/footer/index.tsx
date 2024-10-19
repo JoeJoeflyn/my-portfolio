@@ -1,9 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-100 dark:border-zinc-700/40">
+    <footer className="border-t border-zinc-100 dark:border-zinc-700/40 min-h-[124px]">
       <div className="relative px-4 sm:px-8 lg:px-12">
         <div className="sm:px-8">
           <div className="mx-auto max-w-7xl">

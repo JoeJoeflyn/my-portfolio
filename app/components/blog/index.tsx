@@ -1,5 +1,4 @@
 "use client";
-import useDraggable from "@/app/hooks/useDraggableImage";
 import {
   dateFormate,
   isBlockObjectResponse,
@@ -14,9 +13,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-const RenderBlock = dynamic(() => import("@/app/components/render-utils"), {
-  ssr: false,
-});
+const RenderBlock = dynamic(() => import("@/app/components/render-utils"));
 
 export default function Blog({
   heading,
@@ -27,8 +24,6 @@ export default function Blog({
 }) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const imageRef = React.useRef<HTMLImageElement>(null);
-  const { setIsReposition, isReposition, translation, handleMouseDown } =
-    useDraggable(containerRef, imageRef);
 
   return (
     <div className="sm:px-8 mt-16 lg:mt-32">
@@ -59,38 +54,6 @@ export default function Blog({
                 <article>
                   <header className="flex flex-col">
                     <div className="relative my-6 group">
-                      <div className="absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
-                        {"cover" in heading && heading?.cover ? (
-                          isReposition ? (
-                            <div className="flex items-center rounded">
-                              <button
-                                onClick={() => setIsReposition((prev) => !prev)}
-                                aria-label="Save position"
-                                className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded-s bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
-                              >
-                                Save position
-                              </button>
-                              <button
-                                onClick={() => setIsReposition((prev) => !prev)}
-                                aria-label="Cancel repositioning"
-                                className="user-select-none transition-background duration-20 ease-in cursor-pointer flex items-center justify-center px-1.5 py-1 rounded-e bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
-                              >
-                                Cancel
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="flex items-center rounded">
-                              <button
-                                onClick={() => setIsReposition((prev) => !prev)}
-                                aria-label="Reposition"
-                                className="user-select-none transition-background duration-20 ease-in cursor-pointer border-r border-r-[rgba(255,255,255,0.094)] flex items-center justify-center px-1.5 py-1 rounded bg-[#252525] hover:bg-[#2F2F2F] font-normal text-xs text-[#9B9B9B] fill-current"
-                              >
-                                Reposition
-                              </button>
-                            </div>
-                          )
-                        ) : null}
-                      </div>
                       <div
                         className={`overflow-hidden ${
                           "cover" in heading &&
@@ -98,7 +61,6 @@ export default function Blog({
                           "h-52"
                         } relative`}
                         ref={containerRef}
-                        onMouseDown={handleMouseDown}
                       >
                         {"cover" in heading && heading?.cover !== null && (
                           <Image
@@ -124,7 +86,7 @@ export default function Blog({
                           />
                         )}
                       </div>
-                      <div
+                      {/* <div
                         className={`${
                           "cover" in heading &&
                           heading?.cover !== null &&
@@ -140,7 +102,7 @@ export default function Blog({
                               }}
                             ></div>
                           )}
-                      </div>
+                      </div> */}
                     </div>
                     <h1 className="mt-6 md:text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 text-5xl">
                       {"properties" in heading &&

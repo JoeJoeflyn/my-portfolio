@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 export default function Text({ title }: { title: any[] }) {

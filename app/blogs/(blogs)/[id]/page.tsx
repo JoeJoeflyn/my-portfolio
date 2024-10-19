@@ -4,7 +4,6 @@ import {
   getPage,
   getTableRow,
 } from "@/app/api/notion";
-import Blog from "@/app/components/blog";
 import {
   DatabaseObjectResponse,
   ListBlockChildrenResponse,
@@ -12,6 +11,8 @@ import {
   PartialDatabaseObjectResponse,
   PartialPageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
+import dynamic from "next/dynamic";
+const Blog = dynamic(() => import("@/app/components/blog"));
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const data = await getPage(params.id);

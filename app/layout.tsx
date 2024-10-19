@@ -39,6 +39,7 @@ const baseMetadata = {
 export async function generateMetadata(): Promise<Metadata> {
   return {
     ...baseMetadata,
+    metadataBase: new URL("https://my-portfolio-three-sepia.vercel.app/"),
     title: {
       default: baseMetadata.title,
       template: `%s | ${baseMetadata.title}`,
@@ -46,9 +47,8 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: baseMetadata.title,
       description: baseMetadata.description,
-      url: "https://my-portfolio-three-sepia.vercel.app/",
       siteName: baseMetadata.title,
-      images: ["/images/kurumi-hehe.png"],
+      images: "/images/kurumi-hehe.png",
       locale: "en_US",
       type: "website",
     },
@@ -56,7 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: baseMetadata.title,
       description: baseMetadata.description,
-      images: ["/images/kurumi-hehe.png"],
+      images: "/images/kurumi-hehe.png",
     },
     verification: {
       google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",

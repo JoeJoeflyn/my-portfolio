@@ -2,10 +2,11 @@ import { CodeBlock } from "@/app/components/code-block";
 import FaviconDisplay from "@/app/components/favIcon";
 import Text from "@/app/components/text";
 import "highlight.js/styles/github.css";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
 import { Tweet } from "react-tweet";
-import RenderNestedList from "./render-nested-list";
+const RenderNestedList = dynamic(() => import("./render-nested-list"));
 
 export default function RenderBlock({ block }: any) {
   const { type, id } = block;
@@ -66,7 +67,7 @@ export default function RenderBlock({ block }: any) {
         <ul>
           <li className="my-2" key={block.id}>
             <Text title={value.rich_text} />
-            {!!value.children && RenderNestedList(block)}
+            {!!value.children && <RenderNestedList block={block} />}
           </li>
         </ul>
       );
