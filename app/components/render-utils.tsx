@@ -265,7 +265,7 @@ export default function RenderBlock({ block }: any) {
         <div className="flex">
           {block.children.map((childBlock: any) => (
             <React.Fragment key={childBlock.id}>
-              {RenderBlock(childBlock)}
+              <RenderBlock block={childBlock} />
             </React.Fragment>
           ))}
         </div>
