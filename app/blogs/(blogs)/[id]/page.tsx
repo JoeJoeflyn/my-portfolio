@@ -14,6 +14,8 @@ import {
 import dynamic from "next/dynamic";
 const Blog = dynamic(() => import("@/app/components/blog"));
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const data = await getPage(params.id);
 

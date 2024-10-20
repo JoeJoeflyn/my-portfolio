@@ -2,6 +2,8 @@ import { getNotionPage } from "@/app/api/notion";
 import { dateFormate } from "../shared/utils";
 import Link from "next/link";
 
+export const revalidate = 3600;
+
 export async function generateMetadata() {
   return {
     title: "Blogs - Nguyen Thai Tai",

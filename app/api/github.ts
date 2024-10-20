@@ -6,6 +6,7 @@ export const getGithub = async () => {
 
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_GITHUB_API_URL}`, {
+      next: { revalidate: 3600 },
       headers,
     });
 

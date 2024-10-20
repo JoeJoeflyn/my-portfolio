@@ -16,6 +16,8 @@ import ImageSection from "./components/image-sticky";
 import { IconLink } from "./components/icons/icons";
 import { Marquee } from "./components/marquee";
 
+export const revalidate = 3600;
+
 export async function generateMetadata() {
   return {
     title: "About - Nguyen Thai Tai",

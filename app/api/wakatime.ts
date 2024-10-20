@@ -5,6 +5,7 @@ export const getAllTime = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_WAKATIME_API_URL}users/current/all_time_since_today`,
       {
+        next: { revalidate: 3600 },
         headers: {
           Authorization: `Basic ${process.env.NEXT_PUBLIC_WAKATIME_API_KEY}`,
         },
@@ -25,6 +26,7 @@ export const getStats = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_WAKATIME_API_URL}users/current/stats/last_7_days`,
       {
+        next: { revalidate: 3600 },
         headers: {
           Authorization: `Basic ${process.env.NEXT_PUBLIC_WAKATIME_API_KEY}`,
         },
@@ -46,6 +48,7 @@ export const getSummaries = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_WAKATIME_API_URL}users/current/summaries?start=${yesterday}&end=${today}`,
       {
+        next: { revalidate: 3600 },
         headers: {
           Authorization: `Basic ${process.env.NEXT_PUBLIC_WAKATIME_API_KEY}`,
         },
@@ -66,6 +69,7 @@ export const getInsights = async () => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_WAKATIME_API_URL}users/current/insights/days`,
       {
+        next: { revalidate: 3600 },
         headers: {
           Authorization: `Basic ${process.env.NEXT_PUBLIC_WAKATIME_API_KEY}`,
         },
