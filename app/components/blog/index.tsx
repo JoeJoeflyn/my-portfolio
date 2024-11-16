@@ -55,11 +55,10 @@ export default function Blog({
                   <header className="flex flex-col">
                     <div className="relative my-6 group">
                       <div
-                        className={`overflow-hidden ${
-                          "cover" in heading &&
+                        className={`overflow-hidden ${"cover" in heading &&
                           heading?.cover !== null &&
                           "h-52"
-                        } relative`}
+                          } relative`}
                         ref={containerRef}
                       >
                         {"cover" in heading && heading?.cover !== null && (
@@ -68,20 +67,17 @@ export default function Blog({
                             ref={imageRef}
                             src={
                               "external" in heading?.cover! &&
-                              heading?.cover?.external?.url
+                                heading?.cover?.external?.url
                                 ? heading.cover.external.url
                                 : "file" in heading?.cover! &&
                                   heading?.cover?.file?.url
-                                ? heading.cover.file.url
-                                : ""
+                                  ? heading.cover.file.url
+                                  : ""
                             }
                             alt="Guillotined"
                             draggable={false}
                             fill
-                            style={{
-                              position: "absolute",
-                              objectFit: "cover",
-                            }}
+                            className="absolute object-cover"
                             sizes="(max-width: 768px) 100vw, 672px"
                           />
                         )}
@@ -106,11 +102,11 @@ export default function Blog({
                     </div>
                     <h1 className="mt-6 md:text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 text-5xl">
                       {"properties" in heading &&
-                      "Name" in heading?.properties &&
-                      "title" in heading?.properties?.Name &&
-                      heading?.properties?.Name?.title?.length
+                        "Name" in heading?.properties &&
+                        "title" in heading?.properties?.Name &&
+                        heading?.properties?.Name?.title?.length
                         ? "plain_text" in heading?.properties?.Name?.title[0] &&
-                          heading?.properties?.Name?.title[0]?.plain_text
+                        heading?.properties?.Name?.title[0]?.plain_text
                         : "Untitled"}
                     </h1>
                     <time className="order-first flex items-center text-base text-zinc-200 dark:text-zinc-100">

@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React from "react";
 
+
 export default function ProfileSection() {
   const [prevScrollPos, setPrevScrollPos] = React.useState(0);
   const [navbarSticky, setNavbarSticky] = React.useState(false);
@@ -31,6 +32,17 @@ export default function ProfileSection() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
+
+  const memoizedImage = React.useMemo(() => (
+    <Image
+      src="/images/avatar.jpg"
+      alt="Avatar"
+      width={128}
+      height={128}
+      className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
+    />
+  ), []);
+
   return (
     <div
       className={`${
@@ -39,13 +51,7 @@ export default function ProfileSection() {
           : "relative h-16 w-16"
       } rounded-full overflow-hidden`}
     >
-      <Image
-        src="/images/avatar.jpg"
-        alt="Avatar"
-        width={128}
-        height={128}
-        className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
-      />
+      {memoizedImage}
     </div>
   );
 }

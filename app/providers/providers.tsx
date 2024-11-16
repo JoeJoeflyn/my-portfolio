@@ -14,11 +14,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       });
     }
   }, []);
-  return (
+  return React.useMemo(() => (
     <PostHogProvider client={posthog}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {children}
       </ThemeProvider>
     </PostHogProvider>
-  );
+  ), [children]);
 }

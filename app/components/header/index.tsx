@@ -21,6 +21,8 @@ export default function Header() {
     []
   );
 
+  const memoizedButton = React.useMemo(() => <Button />, []);
+
   React.useEffect(() => {
     let prevScrollPos = window.scrollY;
 
@@ -71,12 +73,14 @@ export default function Header() {
             </div>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
-            <Button />
+            {memoizedButton}
           </div>
         </div>
       </div>
       <div
-        className={`"top-0 z-10 h-16 md:pt-6 ${navbarSticky ? "" : "mt-6"}`}
+        className={`"top-0 z-10 h-16 md:pt-6 ${
+          navbarSticky ? "" : "mt-6"
+        }`}
         style={{ position: "sticky" }}
       >
         <div className="sm:px-8 w-full">
@@ -206,7 +210,7 @@ export default function Header() {
                     <div className="pointer-events-auto">
                       <div className="lg:hidden flex justify-end md:flex-1">
                         <div className="pointer-events-auto">
-                          <Button />
+                          {memoizedButton}
                         </div>
                       </div>
                     </div>
