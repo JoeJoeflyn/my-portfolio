@@ -1,67 +1,105 @@
-export type NotionBlock = {
-  object: "block";
-  id: string;
-  parent: {
-    type: "page_id";
-    page_id: string;
-  };
-  created_time: string;
-  last_edited_time: string;
-  created_by: {
-    object: "user";
-    id: string;
-  };
-  last_edited_by: {
-    object: "user";
-    id: string;
-  };
-  has_children: boolean;
-  archived: boolean;
-  in_trash: boolean;
-  type: "child_page";
-  properties: {
-    Tags?: any; // Assuming Tags can be of any structure; adjust as needed
-    Name: {
-      title: [
-        {
-          plain_text: string;
-        }
-      ];
+export type CareerLogo =
+  | {
+      readonly kind: "icon";
+      readonly name: string;
+      readonly fallback: string;
+    }
+  | {
+      readonly kind: "image";
+      readonly src: string;
+      readonly alt: string;
+    }
+  | {
+      readonly kind: "text";
+      readonly text: string;
     };
-  };
-}[];
+
+export type CareerEntry = {
+  readonly company: string;
+  readonly role: string;
+  readonly dateStart: string;
+  readonly dateEnd: string;
+  readonly logo: CareerLogo;
+  readonly description?: string;
+};
+
+export type SocialLink =
+  | {
+      readonly href: string;
+      readonly kind: "resume";
+      readonly label: string;
+    }
+  | {
+      readonly href: string;
+      readonly kind: "icon";
+      readonly icon: string;
+      readonly label: string;
+    };
 
 export type AllTimeType = {
-  text: string;
-  daily_average: number;
-  range: {
-    start_date: string;
-    end_text: string;
-    end_date: string;
+  readonly text: string;
+  readonly daily_average: number;
+  readonly range: {
+    readonly start_date: string;
+    readonly end_text: string;
+    readonly end_date: string;
   };
+};
+
+export type WakaStatItemType = {
+  readonly total_seconds: number;
+  readonly name: string;
+  readonly percent: number;
+  readonly digital: string;
+  readonly decimal: string;
+  readonly text: string;
+  readonly hours: number;
+  readonly minutes: number;
+  readonly seconds?: number;
 };
 
 export type WakaStatsType = {
-  total_seconds: number;
-  name: string;
-  percent: number;
-  digital: string;
-  decimal: string;
-  text: string;
-  hours: number;
-  minutes: number;
-  human_readable_daily_average_including_other_language: string;
-  best_day: {
-    date: string;
-    text: string;
+  readonly total_seconds: number;
+  readonly human_readable_daily_average_including_other_language: string;
+  readonly human_readable_total?: string;
+  readonly best_day: {
+    readonly date: string;
+    readonly text: string;
+    readonly total_seconds?: number;
   };
-  grand_total: {
-    text: string;
+  readonly grand_total?: {
+    readonly text: string;
   };
+  readonly categories?: readonly WakaStatItemType[];
+  readonly languages?: readonly WakaStatItemType[];
+  readonly editors?: readonly WakaStatItemType[];
+  readonly operating_systems?: readonly WakaStatItemType[];
 };
 
 export type WakaInsightsType = {
-  categories: [];
-  date: string;
-  total: number;
+  readonly categories: [];
+  readonly date: string;
+  readonly total: number;
+};
+
+export type WakaSummaryType = {
+  readonly range: {
+    readonly start: string;
+    readonly end: string;
+    readonly date: string;
+    readonly text: string;
+    readonly timezone: string;
+  };
+  readonly grand_total: {
+    readonly hours: number;
+    readonly minutes: number;
+    readonly total_seconds: number;
+    readonly digital: string;
+    readonly decimal: string;
+    readonly text: string;
+  };
+  readonly categories?: readonly WakaStatItemType[];
+  readonly languages?: readonly WakaStatItemType[];
+  readonly editors?: readonly WakaStatItemType[];
+  readonly operating_systems?: readonly WakaStatItemType[];
 };

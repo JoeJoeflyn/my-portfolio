@@ -1,54 +1,47 @@
 "use client";
 import { useTheme } from "next-themes";
-import Image from "next/image";
-import React, { useEffect, useState, useMemo, memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 
 export default memo(function Button() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
-  // Wait until the component is mounted to render
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
-
-  const moonImage = useMemo(() => (
-    <Image
-      alt="moon"
-      loading="lazy"
-      width={16}
-      height={16}
-      src="/images/moon.svg"
-    />
-  ), []);
-
-  const sunImage = useMemo(() => (
-    <Image
-      alt="sun"
-      loading="lazy"
-      width={16}
-      height={16}
-      src="/images/sun.svg"
-    />
-  ), []);
-
-  if (!mounted) {
-    // Avoid rendering anything during server-side rendering
-    return null;
-  }
+  const isDark = mounted ? resolvedTheme === "dark" : true;
+  const CycleIcon = mounted ? (isDark ? SunIcon : MoonIcon) : SunIcon;
 
   return (
     <button
-      onClick={toggleTheme}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       type="button"
-      aria-label="Toggle dark mode"
-      className="group rounded-full bg-white/90 px-3 py-2 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
+      aria-label="Toggle theme"
+      className="flex items-center justify-center h-9 w-9 text-[var(--text-secondary)] bg-[var(--surface)] border-2 border-[var(--border-heavy)] duration-150 group transition-colors hover:text-[var(--yellow)] hover:bg-[var(--surface-elevated)] hover:border-[var(--yellow)]"
     >
-      {theme === "dark" ? moonImage : sunImage}
+      <CycleIcon />
     </button>
   );
 });
+
+function SunIcon() {
+  return (
+    <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square">
+      <circle cx="12" cy="12" r="5" />
+      <line x1="12" y1="1" x2="12" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="23" />
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+      <line x1="1" y1="12" x2="3" y2="12" />
+      <line x1="21" y1="12" x2="23" y2="12" />
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  );
+}

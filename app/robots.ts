@@ -1,12 +1,15 @@
 import { MetadataRoute } from 'next';
+import { getBaseUrl } from './lib/base-url';
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const base = await getBaseUrl();
+
   return {
     rules: {
       userAgent: '*',
       allow: '/',
     },
-    host: 'https://my-portfolio-pbiwtvvm8-joejoeflyns-projects.vercel.app/',
-    sitemap: 'https://my-portfolio-pbiwtvvm8-joejoeflyns-projects.vercel.app/sitemap.xml',
+    host: base,
+    sitemap: `${base}/sitemap.xml`,
   };
 }

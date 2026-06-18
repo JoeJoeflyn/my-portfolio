@@ -1,11 +1,29 @@
+import { ICON_URL } from "../shared/constant";
+
 export const getGithub = async () => {
+  const apiToken = process.env.GITHUB_PAT;
+
+  const githubProfile = ICON_URL.find(
+    (link) => link.kind === "icon" && link.icon === "github",
+  )?.href;
+  const username = githubProfile
+    ?.replace("https://github.com/", "")
+    .split("/")[0];
+
+  if (!apiToken || !username) {
+    console.warn("GitHub PAT or username not configured");
+    return "";
+  }
+
+  const apiUrl = `https://api.github.com/repos/${username}/${username}/contents/README.md`;
+
   const headers = {
-    Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_API_TOKEN}`,
+    Authorization: `Bearer ${apiToken}`,
     Accept: "application/vnd.github.v3+json",
   };
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_GITHUB_API_URL}`, {
+    const response = await fetch(apiUrl, {
       next: { revalidate: 3600 },
       headers,
     });
@@ -21,5 +39,6 @@ export const getGithub = async () => {
     return content;
   } catch (error) {
     console.error(error);
+    return "";
   }
 };

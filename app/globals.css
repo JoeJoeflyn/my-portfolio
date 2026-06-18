@@ -2,42 +2,277 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #fafafa;
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-[data-theme="dark"] {
-  --background: black;
-  --foreground: white;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --yellow: #ffd700;
+    --blue: #2563eb;
+    --yellow-dim: #c29200;
+    --blue-dim: #1d4ed8;
+    --yellow-glow: rgba(255, 215, 0, 0.15);
+    --blue-glow: rgba(37, 99, 235, 0.1);
+    --accent: var(--yellow);
+    --accent-dim: var(--yellow-dim);
+    --accent-glow: var(--yellow-glow);
+    --bg: #111111;
+    --surface: #1a1a1a;
+    --surface-elevated: #222222;
+    --surface-high: #2a2a2a;
+    --border: #333333;
+    --border-heavy: #444444;
+    --text-primary: #f5f5f0;
+    --text-secondary: #999990;
+    --text-muted: #666660;
+    --shadow-hard: 6px 6px 0 #000;
+    --shadow-card: 4px 4px 0 var(--border-heavy);
+  }
+
+  .light {
+    --yellow: #c29200;
+    --blue: #1d4ed8;
+    --yellow-dim: #a07800;
+    --blue-dim: #1642b0;
+    --yellow-glow: rgba(194, 146, 0, 0.08);
+    --blue-glow: rgba(29, 78, 216, 0.06);
+    --accent: var(--yellow);
+    --accent-dim: var(--yellow-dim);
+    --accent-glow: var(--yellow-glow);
+    --bg: #fefefe;
+    --surface: #f5f5f0;
+    --surface-elevated: #eeeeee;
+    --surface-high: #e5e5e0;
+    --border: #cccccc;
+    --border-heavy: #999999;
+    --text-primary: #111111;
+    --text-secondary: #555550;
+    --text-muted: #888880;
+    --shadow-hard: 6px 6px 0 #cccccc;
+    --shadow-card: 4px 4px 0 var(--border-heavy);
+  }
+
+  * { border-color: var(--border); }
+  body {
+    background-color: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--yellow); color: #000; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-heavy); }
+}
+
+@layer utilities {
+  .section { @apply px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto w-full; }
+
+  /* Grid background */
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%);
+  }
+  .light .grid-bg { opacity: 0.15; }
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--yellow) 0%, var(--blue) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Scrolling gradient shift */
+  .gradient-shift {
+    background: linear-gradient(135deg, var(--yellow) 0%, var(--blue) 50%, var(--yellow) 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 6s ease infinite;
+  }
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Section label */
+  .section-label {
+    display: inline-block;
+    font-family: var(--font-body); font-weight: 700;
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 4px 10px;
+    background: var(--surface);
+    border: 2px solid var(--border-heavy);
+  }
+
+  /* Heavy rule */
+  .rule { height: 3px; background: var(--border-heavy); border: none; }
+
+  /* Card with hard shadow + distortion hover */
+  .card {
+    background: var(--surface);
+    border: 2px solid var(--border-heavy);
+    border-radius: 0;
+    transition: transform 0.1s step-end, box-shadow 0.1s step-end;
+  }
+  .card:hover {
+    border-color: var(--yellow);
+    box-shadow: 6px 6px 0 var(--yellow);
+    transform: translate(-2px, -2px);
+  }
+  .card:hover .card-distort {
+    transform: skewX(-0.5deg) scaleX(1.008);
+  }
+
+  /* Tag */
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; font-size: 0.7rem; font-weight: 700;
+    font-family: var(--font-body); text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 2px solid var(--border-heavy);
+    color: var(--text-secondary);
+    background: var(--surface);
+    border-radius: 0;
+    transition: border-color 0.1s step-end, color 0.1s step-end;
+  }
+  .tag:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  /* Glass header */
+  .glass {
+    background: rgba(17, 17, 17, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--border-heavy);
+  }
+  .light .glass { background: rgba(254, 254, 254, 0.92); }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.2s step-end, transform 0.2s step-end;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Staggered entrance — hard cut */
+  .animate-stagger > * {
+    opacity: 0;
+    animation: snapIn 0.2s step-end forwards;
+  }
+  .animate-stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .animate-stagger > *:nth-child(2) { animation-delay: 80ms; }
+  .animate-stagger > *:nth-child(3) { animation-delay: 160ms; }
+  .animate-stagger > *:nth-child(4) { animation-delay: 240ms; }
+  .animate-stagger > *:nth-child(5) { animation-delay: 320ms; }
+  .animate-stagger > *:nth-child(6) { animation-delay: 400ms; }
+  .animate-stagger > *:nth-child(7) { animation-delay: 480ms; }
+  .animate-stagger > *:nth-child(8) { animation-delay: 560ms; }
+
+  /* Hard shadow ring */
+  .shadow-hard { box-shadow: var(--shadow-hard); }
+
+  /* Page transition */
+  .page-enter { animation: pageEnter 0.15s step-end forwards; }
+  @keyframes pageEnter {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Cursor trail dot */
+  .cursor-dot {
+    position: fixed; pointer-events: none; z-index: 99999;
+    width: 8px; height: 8px;
+    background: var(--yellow); border: 2px solid var(--bg);
+    border-radius: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+  }
+  .cursor-trail {
+    position: fixed; pointer-events: none; z-index: 99998;
+    border-radius: 0;
+    border: 1.5px solid var(--yellow);
+    transform: translate(-50%, -50%);
+    transition: opacity 0.4s ease;
   }
 }
 
-.react-calendar-heatmap .color-scale-1 {
-  fill: #d0f0ed;
-}
-.react-calendar-heatmap .color-scale-2 {
-  fill: #17cfbb;
-}
-.react-calendar-heatmap .color-scale-3 {
-  fill: #14b8a6;
-}
-.react-calendar-heatmap .color-scale-4 {
-  fill: #12a191;
-}
-.react-calendar-heatmap .color-scale-5 {
-  fill: #0f8a7d;
-}
+@keyframes snapIn   { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes typewriter { from { max-width: 0; } to { max-width: 100%; } }
+@keyframes blink      { 0%, 100% { border-color: var(--yellow); } 50% { border-color: transparent; } }
+@keyframes fadeIn     { from { opacity: 0; } to { opacity: 1; } }
+@keyframes thudIn     { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-.react-calendar-heatmap .color-scale-6 {
-  fill: #0d7368;
+.animate-fade-in  { animation: fadeIn 0.2s step-end forwards; }
+.animate-thud-in  { animation: thudIn 0.15s step-end forwards; }
+
+/* Heatmap */
+.react-calendar-heatmap { font-family: var(--font-body); }
+.react-calendar-heatmap text { fill: var(--text-muted); font-size: 9px; font-family: var(--font-body); }
+.react-calendar-heatmap rect { rx: 0; ry: 0; }
+.heatmap--wakatime .react-calendar-heatmap .color-empty { fill: var(--surface-high); stroke: var(--border-heavy); stroke-width: 1; }
+.heatmap--wakatime .react-calendar-heatmap .color-scale-1 { fill: rgba(255, 215, 0, 0.1); }
+.heatmap--wakatime .react-calendar-heatmap .color-scale-2 { fill: rgba(255, 215, 0, 0.2); }
+.heatmap--wakatime .react-calendar-heatmap .color-scale-3 { fill: rgba(255, 215, 0, 0.35); }
+.heatmap--wakatime .react-calendar-heatmap .color-scale-4 { fill: rgba(255, 215, 0, 0.5); }
+.heatmap--wakatime .react-calendar-heatmap .color-scale-5 { fill: rgba(37, 99, 235, 0.5); }
+.heatmap--wakatime .react-calendar-heatmap .color-scale-6 { fill: var(--blue); }
+.heatmap--wakatime .react-calendar-heatmap rect:hover { stroke: var(--yellow); stroke-width: 2; }
+.heatmap--github .react-calendar-heatmap .github-empty { fill: #161b22; stroke: var(--border-heavy); stroke-width: 1; }
+.heatmap--github .react-calendar-heatmap .github-scale-0 { fill: #161b22; stroke: var(--border-heavy); stroke-width: 1; }
+.heatmap--github .react-calendar-heatmap .github-scale-1 { fill: #0e4429; }
+.heatmap--github .react-calendar-heatmap .github-scale-2 { fill: #006d32; }
+.heatmap--github .react-calendar-heatmap .github-scale-3 { fill: #26a641; }
+.heatmap--github .react-calendar-heatmap .github-scale-4 { fill: #39d353; }
+.heatmap--github .react-calendar-heatmap rect:hover { stroke: #39d353; stroke-width: 2; }
+
+/* Icon invert — used for icons with explicit dark fills (e.g. Bun, Next.js, X)
+   :root is dark theme by default; invert is active unless .light overrides it.
+   This works during SSR/prerendering where no class is set yet. */
+.icon-invert-dark { filter: invert(1); }
+.light .icon-invert-dark { filter: none; }
+
+/* Prose — GitHub README rendering */
+.prose-card {
+  font-family: var(--font-body); font-size: 0.875rem; line-height: 1.7;
+  color: var(--text-secondary); word-break: break-word;
 }
+.prose-card h1, .prose-card h2, .prose-card h3, .prose-card h4, .prose-card h5, .prose-card h6 {
+  font-family: var(--font-display); font-weight: 800; color: var(--text-primary);
+  margin-top: 1.5em; margin-bottom: 0.5em; line-height: 1.2;
+}
+.prose-card h1 { font-size: 1.75rem; border-bottom: 2px solid var(--border-heavy); padding-bottom: 0.3em; }
+.prose-card h2 { font-size: 1.4rem; border-bottom: 2px solid var(--border-heavy); padding-bottom: 0.3em; }
+.prose-card h3 { font-size: 1.15rem; }
+.prose-card h4, .prose-card h5, .prose-card h6 { font-size: 1rem; }
+.prose-card h1:first-child, .prose-card h2:first-child, .prose-card h3:first-child { margin-top: 0; }
+.prose-card p { margin: 0.75em 0; }
+.prose-card a { color: var(--yellow); text-decoration: underline; text-underline-offset: 2px; }
+.prose-card a:hover { color: var(--text-primary); }
+.prose-card ul, .prose-card ol { margin: 0.75em 0; padding-left: 1.5em; }
+.prose-card ul { list-style: square; }
+.prose-card ol { list-style: decimal; }
+.prose-card li { margin: 0.25em 0; }
+.prose-card li::marker { color: var(--text-muted); }
+.prose-card code {
+  font-family: var(--font-body); font-size: 0.85em;
+  background: var(--surface-high); border: 1px solid var(--border-heavy);
+  padding: 0.1em 0.4em; border-radius: 0;
+}
+.prose-card pre {
+  background: var(--surface-high); border: 2px solid var(--border-heavy);
+  padding: 1em; overflow-x: auto; margin: 1em 0; border-radius: 0;
+}
+.prose-card pre code { background: none; border: none; padding: 0; font-size: 0.85em; }
+.prose-card blockquote {
+  border-left: 3px solid var(--yellow); padding-left: 1em;
+  margin: 1em 0; color: var(--text-muted); font-style: italic;
+}
+.prose-card img { display: block; width: auto; max-width: 100%; height: auto; margin: 0.75em 0; border: 2px solid var(--border-heavy); }
+.prose-card a img { border: none; }
+.prose-card br + br { display: none; }
+.prose-card h1 + br, .prose-card h2 + br, .prose-card h3 + br { display: none; }
+.prose-card p:empty { display: none; }
+.prose-card hr { border: none; height: 2px; background: var(--border-heavy); margin: 1.5em 0; }
+.prose-card table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.8rem; }
+.prose-card th, .prose-card td { border: 2px solid var(--border-heavy); padding: 0.5em 0.75em; text-align: left; }
+.prose-card th { background: var(--surface-high); font-weight: 700; color: var(--text-primary); }
+.prose-card input[type="checkbox"] { margin-right: 0.5em; accent-color: var(--yellow); }

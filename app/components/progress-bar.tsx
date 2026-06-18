@@ -1,51 +1,16 @@
-"use client";
 import React from "react";
-import { ColorScheme } from "@/app/shared/constant";
-import { ProgressBar as ProgressBarComponent } from "react-progressbar-fancy";
 
-interface ProgressBarProps {
-  score: number;
-  label: string;
-  text: string;
-}
-
-const ProgressBar: React.FC<ProgressBarProps> = React.memo(
-  ({ score, label, text }) => {
-    const [isHovered, setIsHovered] = React.useState(false);
-
-    const handleMouseEnter = React.useCallback(() => setIsHovered(true), []);
-    const handleMouseLeave = React.useCallback(() => setIsHovered(false), []);
-
-    const colorScheme = React.useMemo(
-      () => ColorScheme[label as keyof typeof ColorScheme]?.primary,
-      [label]
-    );
-
-    return (
-      <div
-        className="group relative col-span-3"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <ProgressBarComponent
-          className="col-span-3"
-          primaryColor={colorScheme}
-          secondaryColor={colorScheme}
-          hideText
-          darkTheme
-          score={score}
-        />
-        {isHovered && (
-          <div className="absolute -top-2.5 -right-20 z-10 scale-0 transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100 flex items-center">
-            <span className="absolute bg-gray-800 h-3 w-3 -left-1.5 transform rotate-45"></span>
-            {text}
-          </div>
-        )}
+export default function ProgressBar({ label, text, score }: { label?: string; text?: string; score?: number }) {
+  const s = score ?? 0;
+  return (
+    <div className="w-full">
+      <div className="flex justify-between mb-1">
+        <span className="text-[var(--text-secondary)] text-xs font-body font-bold">{label}</span>
+        <span className="text-[var(--text-muted)] text-xs font-body font-bold">{text}</span>
       </div>
-    );
-  }
-);
-
-ProgressBar.displayName = "ProgressBar";
-
-export default ProgressBar;
+      <div className="h-2 w-full bg-[var(--surface-high)] border-2 border-[var(--border-heavy)]">
+        <div className="h-full bg-[var(--yellow)] duration-500 transition-all" style={{ width: `${s}%` }} />
+      </div>
+    </div>
+  );
+}

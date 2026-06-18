@@ -1,267 +1,221 @@
 import {
-  Career,
-  FirstRow,
-  IconURL,
-  Intro,
-  SecondRow,
-  ThirdRow,
+  CAREER,
+  FIRST_ROW,
+  ICON_URL,
+  INTRO,
+  SECOND_ROW,
+  THIRD_ROW,
 } from "@/app/shared/constant";
-import { dateFormate, isPageObjectResponse } from "@/app/shared/utils";
+import type { CareerLogo } from "@/app/shared/interface";
 import { marked } from "marked";
 import Image from "next/image";
-import Link from "next/link";
 import { getGithub } from "./api/github";
-import { getNotionPage } from "./api/notion";
 import ImageSection from "./components/image-sticky";
 import { IconLink } from "./components/icons/icons";
 import { Marquee } from "./components/marquee";
+import { ScrollReveal } from "./components/scroll-reveal";
+import TechIcon from "./components/tech-icon";
 
 export const revalidate = 3600;
-
 export async function generateMetadata() {
   return {
-    title: "About - Nguyen Thai Tai",
-    description: "This is where my WakaTime metrics will be shown here.",
+    title: "About — Nguyen Thai Tai",
+    description: "Full-stack web developer based in Ho Chi Minh City.",
   };
 }
 
-export default async function Home() {
-  const { results: parentPages } = await getNotionPage();
-  const githubReadme = (await getGithub()) as string;
+function assertNever(value: never): never {
+  throw new Error(`Unhandled: ${JSON.stringify(value)}`);
+}
+function renderCareerLogo(logo: CareerLogo) {
+  switch (logo.kind) {
+    case "icon":
+      return (
+        <TechIcon
+          name={logo.name}
+          className="h-6 w-6"
+          fallback={<span className="text-xs font-bold">{logo.fallback}</span>}
+        />
+      );
+    case "image":
+      return (
+        <Image
+          src={logo.src}
+          alt={logo.alt}
+          width={48}
+          height={48}
+          className="p-2 h-full w-full object-contain"
+        />
+      );
+    case "text":
+      return <span className="text-xs font-bold">{logo.text}</span>;
+    default:
+      return assertNever(logo);
+  }
+}
 
+export default async function Home() {
+  const readme = await getGithub();
+  const readmeHtml = readme ? marked.parse(readme, { async: false }) : "";
   return (
-    <div className="relative px-4 mt-14 sm:px-8 lg:px-12">
-      <div className="relative md:px-4 sm:px-8 lg:px-12">
-        {/* image avatar */}
-        <ImageSection />
-        {/* intro */}
-        <div className="grid grid-cols-1 md:grid-cols-5 mt-9">
-          <div className="col-span-3">
-            <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-              Fresher.
-            </h1>
-            <p className="mt-6 text-base leading-7 text-zinc-600 dark:text-zinc-400">
-              {Intro}
-            </p>
-            <div className="mt-6 flex gap-6">
-              {IconURL.map((item) => (
-                <IconLink key={item.href} href={item.href} img={item.img} />
+    <div className="pt-24 md:pt-36">
+      <section className="relative section">
+        <div className="max-w-4xl animate-stagger">
+          <div className="flex items-center mb-12 gap-6">
+            <ImageSection />
+            <div className="flex gap-3">
+              {ICON_URL.map((item) => (
+                <IconLink key={item.href} {...item} />
               ))}
             </div>
           </div>
-        </div>
-        {/* marquee */}
-        <div className="mt-9">
-          <Marquee direction="right" speed="fast">
-            {FirstRow?.map((item, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-4 dark:text-zinc-100 text-black transition-colors duration-300 hover:text-[#3c3e49] cursor-default"
-              >
-                <Image
-                  alt={item.text}
-                  loading="lazy"
-                  width={46}
-                  height={46}
-                  src={item.href}
-                  className="transition-opacity duration-300 hover:opacity-80"
-                />
-                <span className="text-xl font-semibold">{item.text}</span>
-              </div>
-            ))}
-          </Marquee>
-          <Marquee direction="left" speed="normal">
-            {SecondRow?.map((item, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-4 dark:text-zinc-100 text-black transition-colors duration-300 hover:text-[#3c3e49] cursor-default"
-              >
-                <Image
-                  alt={item.text}
-                  loading="lazy"
-                  width={46}
-                  height={46}
-                  src={item.href}
-                  className="transition-opacity duration-300 hover:opacity-80"
-                />
-                <span className="text-xl font-semibold">{item.text}</span>
-              </div>
-            ))}
-          </Marquee>
-          <Marquee direction="right" speed="slow">
-            {ThirdRow?.map((item, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-4 dark:text-zinc-100 text-black transition-colors duration-300 hover:text-[#3c3e49] cursor-default"
-              >
-                <Image
-                  alt={item.text}
-                  loading="lazy"
-                  width={46}
-                  height={46}
-                  src={item.href}
-                  className="transition-opacity duration-300 hover:opacity-80"
-                />
-                <span className="text-xl font-semibold">{item.text}</span>
-              </div>
-            ))}
-          </Marquee>
-        </div>
-        {/* Body */}
-        <div className="mx-auto max-w-7xl mt-14 md:mt-16">
-          <div className="relative">
-            <div className="mx-auto max-w-2xl lg:max-w-5xl">
-              <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-                <div className="flex flex-col gap-16">
-                  {parentPages?.map((page, index) => {
-                    if (!isPageObjectResponse(page)) return null;
-                    return (
-                      <article
-                        key={page?.id}
-                        className="group relative flex flex-col items-start"
-                      >
-                        <h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-                          <div className="absolute -inset-y-6 -inset-x-4 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-zinc-800/50 sm:-inset-x-6 sm:rounded-2xl"></div>
-                          <Link href={`/blogs/${page?.id}`}>
-                            <span className="absolute -inset-y-6 -inset-x-4 sm:-inset-x-6 sm:rounded-2xl"></span>
-                            <span className="relative">
-                              {"properties" in page &&
-                                page.properties.Name &&
-                                page.properties.Name.type === "title" &&
-                                page.properties.Name.title.map(
-                                  (item, index) => item.plain_text
-                                )}
-                            </span>
-                          </Link>
-                        </h2>
-                        <time
-                          className="relative order-first mb-3 flex items-center text-sm text-zinc-700 dark:text-zinc-300 pl-3.5"
-                          dateTime={dateFormate(
-                            "created_time" in page
-                              ? (page?.created_time as string)
-                              : ""
-                          )}
-                        >
-                          <span
-                            className="absolute inset-y-0 left-0 flex items-center"
-                            aria-hidden="true"
-                          >
-                            <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-400"></span>
-                          </span>
-                          {"created_time" in page &&
-                            dateFormate(page?.created_time as string)}
-                        </time>
-                        <Link
-                          href={`/blogs/${page?.id}`}
-                          aria-label="Read article"
-                          className="relative mt-4 flex items-center text-sm font-medium text-teal-500"
-                        >
-                          Read article
-                          <svg
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            aria-hidden="true"
-                            className="ml-1 h-4 w-4 stroke-current"
-                          >
-                            <path
-                              d="M6.75 5.75 9.25 8l-2.5 2.25"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            ></path>
-                          </svg>
-                        </Link>
-                      </article>
-                    );
-                  })}
-                </div>
-                <div className="lg:pl-16 xl:pl-24">
-                  <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
-                    <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden="true"
-                        className="h-6 w-6 flex-none"
-                      >
-                        <path
-                          d="M2.75 9.75a3 3 0 0 1 3-3h12.5a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H5.75a3 3 0 0 1-3-3v-8.5Z"
-                          className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
-                        />
-                        <path
-                          d="M3 14.25h6.249c.484 0 .952-.002 1.316.319l.777.682a.996.996 0 0 0 1.316 0l.777-.682c.364-.32.832-.319 1.316-.319H21M8.75 6.5V4.75a2 2 0 0 1 2-2h2.5a2 2 0 0 1 2 2V6.5"
-                          className="stroke-zinc-400 dark:stroke-zinc-500"
-                        />
-                      </svg>
-                      <span className="ml-3">Career</span>
-                    </h2>
-                    <ol className="mt-6 space-y-4">
-                      {Career.map((item, index) => (
-                        <li key={index} className="flex gap-4">
-                          <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
-                            <Image
-                              alt={`${item.company} logo`}
-                              loading="lazy"
-                              width={200}
-                              height={175}
-                              className="object-contain"
-                              src={item.logoSrc}
-                              style={{ color: "transparent" }}
-                            />
-                          </div>
-                          <dl className="flex flex-auto flex-wrap gap-x-2">
-                            <dt className="sr-only">Company</dt>
-                            <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                              {item.company}
-                            </dd>
-                            <dt className="sr-only">Role</dt>
-                            <dd className="text-xs text-zinc-500 dark:text-zinc-400">
-                              {item.role}
-                            </dd>
-                            <dt className="sr-only">Date</dt>
-                            <dd
-                              className="ml-auto text-xs"
-                              aria-label={`${item.dateStart} until ${item.dateEnd}`}
-                            >
-                              <time
-                                dateTime={item.dateStart}
-                                className="text-zinc-200 dark:dark:text-zinc-100"
-                              >
-                                {item.dateStart}
-                              </time>
-                              <span
-                                className="text-zinc-200 dark:dark:text-zinc-100"
-                                aria-hidden="true"
-                              >
-                                —
-                              </span>
-                              <time
-                                dateTime={item.dateEnd}
-                                className="text-zinc-200 dark:dark:text-zinc-100"
-                              >
-                                {item.dateEnd}
-                              </time>
-                            </dd>
-                          </dl>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
 
-                  <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40 my-5">
-                    <div
-                      className="w-full"
-                      dangerouslySetInnerHTML={{ __html: marked(githubReadme) }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+          <h1 className="text-5xl font-black font-display leading-[0.85] tracking-tighter lg:text-[7rem] sm:text-7xl">
+            NGUYEN
+            <br />
+            <span className="text-gradient">THAI TAI</span>
+          </h1>
+
+          <div className="p-6 mt-10 max-w-2xl bg-[var(--surface)] border-2 border-[var(--border-heavy)]">
+            <span className="block mb-3 text-[var(--text-muted)] text-xs font-body font-bold tracking-widest uppercase">
+              <span className="text-[var(--yellow)]">&#x25A0;</span>{" "}
+              terminal.txt
+            </span>
+            <p className="text-[var(--text-secondary)] text-sm font-body leading-relaxed">
+              <span className="text-[var(--yellow)]">$</span> {INTRO}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap mt-8 gap-3">
+            <span className="tag">FRESHER</span>
+            <span className="tag">HCMC</span>
+            <span className="tag">OPEN SOURCE</span>
           </div>
         </div>
+      </section>
+
+      <ScrollReveal>
+        <section className="mt-28 md:mt-36">
+          <div className="mb-6 section">
+            <span className="section-label">TECH STACK</span>
+          </div>
+          <Marquee direction="right" speed="fast">
+            {FIRST_ROW?.map((item, i) => (
+              <div
+                key={i}
+                className="flex items-center text-[var(--text-secondary)] cursor-default duration-200 gap-3 transition-colors hover:text-[var(--yellow)]"
+              >
+                <TechIcon
+                  name={item.slug}
+                  className="h-[18px] w-[18px]"
+                  fallback={item.text.slice(0, 2)}
+                />
+                <span className="text-xs font-body font-bold tracking-wider">
+                  {item.text}
+                </span>
+              </div>
+            ))}
+          </Marquee>
+          <Marquee direction="left" speed="slow">
+            {SECOND_ROW?.map((item, i) => (
+              <div
+                key={i}
+                className="flex items-center text-[var(--text-secondary)] cursor-default duration-200 gap-3 transition-colors hover:text-[var(--blue)]"
+              >
+                <TechIcon
+                  name={item.slug}
+                  className="h-[18px] w-[18px]"
+                  fallback={item.text.slice(0, 2)}
+                />
+                <span className="text-xs font-body font-bold tracking-wider">
+                  {item.text}
+                </span>
+              </div>
+            ))}
+          </Marquee>
+          <Marquee direction="right" speed="normal">
+            {THIRD_ROW?.map((item, i) => (
+              <div
+                key={i}
+                className="flex items-center text-[var(--text-secondary)] cursor-default duration-200 gap-3 transition-colors hover:text-[var(--yellow)]"
+              >
+                <TechIcon
+                  name={item.slug}
+                  className="h-[18px] w-[18px]"
+                  fallback={item.text.slice(0, 2)}
+                />
+                <span className="text-xs font-body font-bold tracking-wider">
+                  {item.text}
+                </span>
+              </div>
+            ))}
+          </Marquee>
+        </section>
+      </ScrollReveal>
+
+      <div className="section">
+        <hr className="my-16 rule" />
+      </div>
+
+      <ScrollReveal>
+        <section className="section">
+          <div className="max-w-4xl">
+            <span className="mb-10 section-label">EXPERIENCE</span>
+            <div className="space-y-6">
+              {CAREER.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-start p-6 card gap-6 group"
+                >
+                  <div className="flex flex-col items-center gap-3 shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 text-[var(--text-muted)] bg-[var(--surface-high)] border-2 border-[var(--border-heavy)] overflow-hidden transition-colors group-hover:text-[var(--yellow)] group-hover:border-[var(--yellow)]">
+                      {renderCareerLogo(item.logo)}
+                    </div>
+                    <span className="text-[var(--text-muted)] text-xs font-body font-bold">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0 card-distort">
+                    <div className="flex flex-wrap items-baseline justify-between gap-4">
+                      <h3 className="text-lg font-display font-extrabold transition-colors group-hover:text-[var(--yellow)]">
+                        {item.company}
+                      </h3>
+                      <span className="text-[var(--text-muted)] text-xs font-body whitespace-nowrap">
+                        {item.dateStart} — {item.dateEnd}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-[var(--text-secondary)] text-sm font-body font-bold">
+                      {item.role}
+                    </p>
+                    {item.description && (
+                      <p className="mt-3 max-w-lg text-[var(--text-secondary)] text-sm font-body leading-relaxed">
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </ScrollReveal>
+
+      {readmeHtml && (
+        <ScrollReveal>
+          <section className="section mt-28 md:mt-36">
+            <div className="max-w-4xl">
+              <span className="mb-10 section-label">GITHUB</span>
+              <div
+                className="prose-card"
+                dangerouslySetInnerHTML={{ __html: readmeHtml }}
+              />
+            </div>
+          </section>
+        </ScrollReveal>
+      )}
+
+      <div className="section">
+        <hr className="my-16 rule" />
       </div>
     </div>
   );

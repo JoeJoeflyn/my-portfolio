@@ -6,19 +6,19 @@ import React from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+    if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
         api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-
         disable_session_recording: true,
       });
     }
   }, []);
-  return React.useMemo(() => (
+
+  return (
     <PostHogProvider client={posthog}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {children}
       </ThemeProvider>
     </PostHogProvider>
-  ), [children]);
+  );
 }

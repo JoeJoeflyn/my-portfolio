@@ -19,71 +19,33 @@ export const Marquee = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollerRef = React.useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    addAnimation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useEffect(() => { addAnimation(); }, []);
 
   const [start, setStart] = useState(false);
   function addAnimation() {
     if (containerRef.current && scrollerRef.current) {
-      const scrollerContent = Array.from(scrollerRef.current.children);
-
-      scrollerContent.forEach((item) => {
-        const duplicatedItem = item.cloneNode(true);
-        if (scrollerRef.current) {
-          scrollerRef.current.appendChild(duplicatedItem);
-        }
+      Array.from(scrollerRef.current.children).forEach((item) => {
+        if (scrollerRef.current) scrollerRef.current.appendChild(item.cloneNode(true));
       });
-
-      getDirection();
-      getSpeed();
-      setStart(true);
+      getDirection(); getSpeed(); setStart(true);
     }
   }
   const getDirection = () => {
-    if (containerRef.current) {
-      if (direction === "left") {
-        containerRef.current.style.setProperty(
-          "--animation-direction",
-          "forwards"
-        );
-      } else {
-        containerRef.current.style.setProperty(
-          "--animation-direction",
-          "reverse"
-        );
-      }
-    }
+    if (containerRef.current) containerRef.current.style.setProperty("--animation-direction", direction === "left" ? "forwards" : "reverse");
   };
   const getSpeed = () => {
     if (containerRef.current) {
-      if (speed === "fast") {
-        containerRef.current.style.setProperty("--animation-duration", "40s");
-      } else if (speed === "normal") {
-        containerRef.current.style.setProperty("--animation-duration", "60s");
-      } else {
-        containerRef.current.style.setProperty("--animation-duration", "100s");
-      }
+      const d = speed === "fast" ? "36s" : speed === "normal" ? "55s" : "90s";
+      containerRef.current.style.setProperty("--animation-duration", d);
     }
   };
   return (
-    <div
-      ref={containerRef}
-      className={cn("scroller relative z-20 overflow-hidden ", className)}
-    >
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/6 bg-gradient-to-r from-white to-transparent dark:from-zinc-800 dark:to-transparent z-40"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/6 bg-gradient-to-l from-white to-transparent dark:from-zinc-800 dark:to-transparent z-40"></div>
-      <div
-        ref={scrollerRef}
-        className={cn(
-          "flex min-w-full shrink-0 gap-20 py-3 w-max flex-nowrap",
-          start && "animate-scroll ",
-          pauseOnHover && "hover:[animation-play-state:paused]"
-        )}
-      >
+    <div ref={containerRef} className={cn("scroller relative z-20 overflow-hidden border-y-2 border-[var(--border-heavy)]", className)}>
+      <div className="absolute left-0 z-40 w-20 bg-linear-to-r from-[var(--bg)] inset-y-0 pointer-events-none to-transparent" />
+      <div className="absolute right-0 z-40 w-20 bg-linear-to-l from-[var(--bg)] inset-y-0 pointer-events-none to-transparent" />
+      <div ref={scrollerRef} className={cn("flex min-w-full shrink-0 gap-12 py-4 w-max flex-nowrap", start && "animate-scroll", pauseOnHover && "hover:[animation-play-state:paused]")}>
         {children}
       </div>
     </div>
   );
-};
+}

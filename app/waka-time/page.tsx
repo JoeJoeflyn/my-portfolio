@@ -1,144 +1,96 @@
-import dynamic from "next/dynamic";
-import {
-  getAllTime,
-  getInsights,
-  getStats,
-  getSummaries,
-} from "../api/wakatime";
+import { getGitHubContributions } from "../api/github-contributions";
+import { getAllTime, getSummaries, getYearStats, getYearSummaries } from "../api/wakatime";
 import StatsCard from "../components/stat-card";
-const CalendarHeatmapComponent = dynamic(
-  () => import("../components/calendar-heat-map"),
-  {
-    ssr: false,
-  }
-);
-const ChartBar = dynamic(() => import("../components/chart-bar"), {
-  ssr: false,
-});
+import { CalendarHeatmapComponent, ChartBar } from "../components/waka-time-content";
+import { ScrollReveal } from "../components/scroll-reveal";
+import type { WakaSummaryType } from "../shared/interface";
+
+const getTodayDate = () => new Date().toISOString().split("T")[0];
+
+const mapWakaHeatmapDays = (summaries?: readonly WakaSummaryType[] | null) =>
+  (summaries ?? []).flatMap((summary) => {
+    const date = summary.range?.date;
+    const count = summary.grand_total?.total_seconds;
+
+    if (!date || typeof count !== "number") {
+      return [];
+    }
+
+    return [{
+      date,
+      count,
+    }];
+  });
 
 export async function generateMetadata() {
-  return {
-    title: "WakaTime - Nguyen Thai Tai",
-    description: "This is where my WakaTime metrics will be shown here.",
-  };
+  return { title: "WakaTime — Nguyen Thai Tai", description: "My coding activity and WakaTime statistics." };
 }
+export const dynamic = "force-dynamic";
 
-export default async function Page() {
-  const [getWakaAllTime, getWakaStats, getWakaSummaries, getWakaInsights] =
-    await Promise.all([
-      getAllTime(),
-      getStats(),
-      getSummaries(),
-      getInsights(),
-    ]);
+export default async function WakaTimePage() {
+  const [allTime, stats, summaries, yearSummaries, githubCalendar] = await Promise.all([
+    getAllTime(),
+    getYearStats(),
+    getSummaries(),
+    getYearSummaries(),
+    getGitHubContributions(),
+  ]);
 
-  const dailyAverage = `${Math.floor(
-    getWakaAllTime.daily_average / 3600
-  )} hrs ${Math.floor(
-    (getWakaAllTime.daily_average % 3600) / 60
-  )} mins per day`;
+  const todaySummary = summaries?.find((summary: WakaSummaryType) => summary.range.date === getTodayDate()) ?? summaries?.at(-1);
+  const wakaHeatmapDays = mapWakaHeatmapDays(yearSummaries);
+  const hasWakaData = Boolean(allTime || stats || summaries?.length || wakaHeatmapDays.length > 0);
+  const hasGitHubData = Boolean(githubCalendar && githubCalendar.days.length > 0);
 
-  const lastSevenDays =
-    getWakaStats?.human_readable_daily_average_including_other_language ||
-    getWakaStats?.grand_total.text ||
-    "";
+  if (!hasWakaData && !hasGitHubData) {
+    return (
+      <div className="pt-24 md:pt-36">
+        <section className="section">
+          <div className="max-w-4xl">
+            <span className="section-label">WAKATIME</span>
+            <h1 className="mb-8 mt-6 text-5xl font-black font-display leading-[0.9] tracking-tighter sm:text-7xl">
+              CODING
+              <br />
+              <span className="text-gradient">STATS</span>
+            </h1>
+            <p className="text-[var(--text-secondary)] text-sm font-body">
+              Configure your WakaTime credentials or add `GITHUB_PAT` to load activity heatmaps.
+            </p>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
-  const wakaSummary = `Daily Average: ${
-    getWakaSummaries[0]
-      ?.human_readable_daily_average_including_other_language ||
-    getWakaSummaries[0]?.grand_total.text ||
-    ""
-  } mins per day`;
-
-  const bestDayDescription = `Most Active Day: ${getWakaStats?.best_day?.date}`;
-  const bestDayStats = `with ${getWakaStats?.best_day?.text} of activity`;
+  const dailyAverage = allTime ? `${Math.floor(allTime.daily_average / 3600)}h ${Math.floor((allTime.daily_average % 3600) / 60)}m` : "";
+  const yearlyAverage = stats?.human_readable_daily_average_including_other_language || stats?.human_readable_total || "—";
+  const wakaSummary = todaySummary?.grand_total?.text || "—";
+  const bestDayText = `${stats?.best_day?.date}`, bestDayValue = `${stats?.best_day?.text}`;
 
   return (
-    <div className="sm:px-8 mt-16 sm:mt-32">
-      <div className="mx-auto max-w-7xl lg:px-8">
-        <div className="relative px-4 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-2xl lg:max-w-5xl">
-            <>
-              <header className="max-w-2xl">
-                <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-                  My WakaTime Stats
-                </h1>
-                <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-                  This is where my WakaTime metrics will be shown here.
-                </p>
-              </header>
-              <div className="md:mt-16 mt-20">
-                <div className="grid md:grid-cols-2 gap-x-8 gap-y-8 grid-cols-1">
-                  <StatsCard
-                    title="All time coding"
-                    description={`Coded ${getWakaAllTime.text} last year`}
-                    stats={dailyAverage}
-                    rangeStartDate={getWakaAllTime.range.start_date}
-                    rangeEndDate={getWakaAllTime.range.end_text}
-                  />
-                  <StatsCard
-                    title="Last 7 days"
-                    description="Daily Average"
-                    stats={lastSevenDays}
-                  />
-                  <StatsCard
-                    title="Best Day"
-                    description={bestDayDescription}
-                    stats={bestDayStats}
-                  />
-                  <ChartBar
-                    title="Operating Systems"
-                    data={getWakaStats.operating_systems}
-                  />
-                  <ChartBar title="Categories" data={getWakaStats.categories} />
-                  <ChartBar title="Editors" data={getWakaStats.editors} />
-                  <ChartBar title="Languages" data={getWakaStats.languages} />
-                </div>
-              </div>
-              <div className="md:mt-16 mt-20">
-                <header className="max-w-2xl md:mb-16 mb-20">
-                  <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-                    My Activity Last Year
-                  </h1>
-                </header>
-                <CalendarHeatmapComponent days={getWakaInsights.days} />
-              </div>
-            </>
-            <>
-              <header className="max-w-2xl my-20 md:mt-16">
-                <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-                  Today Stats
-                </h1>
-              </header>
-              <div className="md:mt-16 mt-20">
-                <div className="grid md:grid-cols-2 gap-x-8 gap-y-8 grid-cols-1">
-                  <StatsCard
-                    title="Daily Average"
-                    description="Daily Average"
-                    stats={wakaSummary}
-                  />
-                  <ChartBar
-                    title="Operating Systems"
-                    data={getWakaSummaries[1].operating_systems}
-                  />
-                  <ChartBar
-                    title="Categories"
-                    data={getWakaSummaries[1].categories}
-                  />
-                  <ChartBar
-                    title="Editors"
-                    data={getWakaSummaries[1].editors}
-                  />
-                  <ChartBar
-                    title="Languages"
-                    data={getWakaSummaries[1].languages}
-                  />
-                </div>
-              </div>
-            </>
-          </div>
+    <div className="pt-24 md:pt-36">
+      <section className="section">
+        <div className="max-w-4xl">
+          <span className="section-label">WAKATIME</span>
+          <h1 className="mb-8 mt-6 text-5xl font-black font-display leading-[0.9] tracking-tighter sm:text-7xl">
+            CODING
+            <br />
+            <span className="text-gradient">STATS</span>
+          </h1>
         </div>
-      </div>
+      </section>
+      <div className="section"><hr className="my-14 rule" /></div>
+      {hasWakaData ? (
+        <>
+          <ScrollReveal><section className="section"><div className="grid grid-cols-2 gap-4 lg:grid-cols-4"><StatsCard title="Daily Average" description={dailyAverage} stats={`${allTime?.text || "—"}`} /><StatsCard title="Last Year" description="Daily average" stats={yearlyAverage} /><StatsCard title="Best Day" description={bestDayText} stats={bestDayValue} /><StatsCard title="Today" description="Coding time" stats={wakaSummary} /></div></section></ScrollReveal>
+          <ScrollReveal><section className="mt-10 section"><div className="grid gap-4 md:grid-cols-2">{stats?.categories && <ChartBar title="Categories" data={stats.categories} />}{stats?.languages && <ChartBar title="Languages" data={stats.languages} />}{stats?.editors && <ChartBar title="Editors" data={stats.editors} />}{stats?.operating_systems && <ChartBar title="OS" data={stats.operating_systems} />}</div></section></ScrollReveal>
+          <ScrollReveal><section className="mt-10 section"><span className="block mb-6 section-label">TODAY BREAKDOWN</span><div className="grid gap-4 md:grid-cols-2">{todaySummary?.operating_systems && <ChartBar title="Operating Systems" data={todaySummary.operating_systems} />}{todaySummary?.categories && <ChartBar title="Categories" data={todaySummary.categories} />}{todaySummary?.editors && <ChartBar title="Editors" data={todaySummary.editors} />}{todaySummary?.languages && <ChartBar title="Languages" data={todaySummary.languages} />}</div></section></ScrollReveal>
+          <ScrollReveal><section className="mt-14 section"><span className="block mb-6 section-label">WAKATIME ACTIVITY — LAST YEAR</span><div className="p-6 card"><CalendarHeatmapComponent days={wakaHeatmapDays} variant="wakatime" /></div></section></ScrollReveal>
+        </>
+      ) : (
+        <ScrollReveal><section className="section"><div className="p-6 card"><p className="text-[var(--text-secondary)] text-sm font-body">Configure WakaTime API credentials to see your coding stats.</p></div></section></ScrollReveal>
+      )}
+      <ScrollReveal><section className="mt-14 section"><span className="block mb-6 section-label">GITHUB CONTRIBUTIONS — LAST YEAR</span><div className="p-6 card space-y-5"><div><p className="text-[var(--text-secondary)] text-sm font-body">{githubCalendar ? `${githubCalendar.totalContributions.toLocaleString()} contributions from @${githubCalendar.username} in the last year.` : "Add `GITHUB_PAT` to your server environment to load the GitHub contribution calendar."}</p></div>{githubCalendar && <CalendarHeatmapComponent days={githubCalendar.days} variant="github" />}</div></section></ScrollReveal>
+      <div className="section"><hr className="my-16 rule" /></div>
     </div>
   );
 }

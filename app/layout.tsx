@@ -1,101 +1,70 @@
 import type { Metadata } from "next";
-import React from "react";
+import { Be_Vietnam_Pro, Courier_Prime } from "next/font/google";
 import Footer from "./components/footer";
 import Header from "./components/header";
+import { getBaseUrl } from "./lib/base-url";
 import "./globals.css";
 import { Providers } from "./providers/providers";
 
+const display = Be_Vietnam_Pro({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const body = Courier_Prime({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-body",
+  display: "swap",
+});
+
 const baseMetadata = {
   title: "Nguyen Thai Tai",
-  description: "Nguyen Thai Tai Portfolio",
-  applicationName: "Nguyen Thai Tai Portfolio",
-  authors: [{ name: "Nguyen Thai Tai Portfolio" }],
+  description: "Nguyen Thai Tai Portfolio — Web Developer & Designer",
+  applicationName: "Nguyen Thai Tai",
+  authors: [{ name: "Nguyen Thai Tai" }],
   keywords: [
-    "Nguyen Thai Tai",
-    "portfolio",
-    "software engineer",
-    "web developer",
-    "frontend developer",
-    "backend developer",
-    "full-stack developer",
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Next.js",
-    "Node.js",
-    "NestJS",
-    "Mongoose",
-    "Prisma",
-    "responsive design",
-    "UI/UX design",
-    "API development",
+    "Nguyen Thai Tai", "portfolio", "web developer", "frontend",
+    "TypeScript", "React", "Next.js", "Node.js", "design",
   ],
-  generator: "Nguyen Thai Tai Portfolio",
-  creator: "Nguyen Thai Tai Portfolio",
-  publisher: "Nguyen Thai Tai Portfolio",
+  creator: "Nguyen Thai Tai",
+  publisher: "Nguyen Thai Tai",
 };
 
-// Dynamic metadata generation
 export async function generateMetadata(): Promise<Metadata> {
+  const base = await getBaseUrl();
   return {
     ...baseMetadata,
-    metadataBase: new URL("https://my-portfolio-three-sepia.vercel.app/"),
-    title: {
-      default: baseMetadata.title,
-      template: `%s | ${baseMetadata.title}`,
-    },
+    metadataBase: new URL(base),
+    title: { default: baseMetadata.title, template: `%s | ${baseMetadata.title}` },
     openGraph: {
-      title: baseMetadata.title,
-      description: baseMetadata.description,
-      siteName: baseMetadata.title,
-      images: "/images/kurumi-hehe.png",
-      locale: "en_US",
-      type: "website",
+      title: baseMetadata.title, description: baseMetadata.description,
+      siteName: baseMetadata.title, images: "/images/avatar.jpg",
+      locale: "en_US", type: "website",
     },
     twitter: {
-      card: "summary_large_image",
-      title: baseMetadata.title,
-      description: baseMetadata.description,
-      images: "/images/kurumi-hehe.png",
+      card: "summary_large_image", title: baseMetadata.title,
+      description: baseMetadata.description, images: "/images/avatar.jpg",
     },
-    verification: {
-      google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4",
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
+    verification: { google: "h-krulVRrLSSg-fSeJVcQMGF_1XnEb8QYSyYGw6b_t4" },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 } },
   };
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <div className="flex flex-col bg-zinc-100 dark:bg-zinc-900">
-          <div className="inset-0 flex justify-center sm:px-8">
-            <div className="flex w-full max-w-7xl lg:px-8">
-              <div className="w-full bg-white ring-1 ring-zinc-200 dark:bg-zinc-800 dark:ring-zinc-700">
-                <Providers>
-                  <Header />
-                  {children}
-                  <Footer />
-                </Providers>
-              </div>
-            </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${display.variable} ${body.variable} font-body antialiased`}>
+        <div className="grid-bg" />
+        <Providers>
+          <div className="relative z-0 flex flex-col min-h-screen page-enter">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
           </div>
-        </div>
+        </Providers>
       </body>
     </html>
   );

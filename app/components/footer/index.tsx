@@ -1,49 +1,21 @@
 import Link from "next/link";
+import { LINKS } from "@/app/shared/constant";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-100 dark:border-zinc-700/40 min-h-[124px]">
-      <div className="relative px-4 sm:px-8 lg:px-12">
-        <div className="sm:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="pt-10 pb-16">
-              <div className="relative sm:px-6">
-                <div className="mx-auto max-w-2xl lg:max-w-5xl">
-                  <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-                    <div className="flex gap-6 text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                      <Link
-                        href="/"
-                        className="transition hover:text-teal-500 dark:hover:text-teal-400"
-                      >
-                        About
-                      </Link>
-                      <Link
-                        href="#"
-                        className="transition hover:text-teal-500 dark:hover:text-teal-400"
-                      >
-                        Project
-                      </Link>
-                      <Link
-                        href="/blogs"
-                        className="transition hover:text-teal-500 dark:hover:text-teal-400"
-                      >
-                        Blogs
-                      </Link>
-                      <Link
-                        href="/waka-time"
-                        className="transition hover:text-teal-500 dark:hover:text-teal-400"
-                      >
-                        WakaTime
-                      </Link>
-                    </div>
-                    <p className="text-sm text-zinc-200 dark:text-zinc-100">
-                      © 2024 Nguyen Thai Tai. All rights reserved.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <footer className="mt-24 border-[var(--border-heavy)] border-t-2">
+      <div className="py-10 section">
+        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+          <div className="flex items-center gap-6">
+            {LINKS.map(({ href, label }) => (
+              <Link key={href} href={href} className="text-[var(--text-muted)] text-sm font-body font-bold tracking-wider transition-colors uppercase hover:text-[var(--yellow)]">
+                {label}
+              </Link>
+            ))}
           </div>
+          <p className="text-[var(--text-muted)] text-sm font-body font-bold">
+            &copy; {new Date().getFullYear()} NGUYEN THAI TAI
+          </p>
         </div>
       </div>
     </footer>
