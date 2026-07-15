@@ -24,6 +24,37 @@
     --text-muted: #666660;
     --shadow-hard: 6px 6px 0 #000;
     --shadow-card: 4px 4px 0 var(--border-heavy);
+    /* shadcn variables mapped to brutalist dark theme */
+    --background: var(--bg);
+    --foreground: var(--text-primary);
+    --card: var(--surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--surface);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--yellow);
+    --primary-foreground: #000000;
+    --secondary: var(--surface-high);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--surface-high);
+    --muted-foreground: var(--text-muted);
+    --accent-foreground: #000000;
+    --destructive: #ef4444;
+    --input: var(--border-heavy);
+    --ring: var(--yellow);
+    --chart-1: var(--yellow);
+    --chart-2: var(--blue);
+    --chart-3: #22c55e;
+    --chart-4: #f59e0b;
+    --chart-5: #ec4899;
+    --radius: 0px;
+    --sidebar: var(--surface);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--yellow);
+    --sidebar-primary-foreground: #000000;
+    --sidebar-accent: var(--surface-high);
+    --sidebar-accent-foreground: var(--yellow);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--yellow);
   }
 
   .light {
@@ -47,6 +78,37 @@
     --text-muted: #888880;
     --shadow-hard: 6px 6px 0 #cccccc;
     --shadow-card: 4px 4px 0 var(--border-heavy);
+    /* shadcn variables mapped to brutalist light theme */
+    --background: var(--bg);
+    --foreground: var(--text-primary);
+    --card: var(--surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--surface);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--yellow);
+    --primary-foreground: #ffffff;
+    --secondary: var(--surface-high);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--surface-high);
+    --muted-foreground: var(--text-muted);
+    --accent-foreground: #ffffff;
+    --destructive: #dc2626;
+    --input: var(--border-heavy);
+    --ring: var(--yellow);
+    --chart-1: var(--yellow);
+    --chart-2: var(--blue);
+    --chart-3: #16a34a;
+    --chart-4: #d97706;
+    --chart-5: #db2777;
+    --radius: 0px;
+    --sidebar: var(--surface);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--yellow);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: var(--surface-high);
+    --sidebar-accent-foreground: var(--yellow);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--yellow);
   }
 
   * { border-color: var(--border); }

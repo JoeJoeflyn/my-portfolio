@@ -2,7 +2,6 @@ import {
   CAREER,
   FIRST_ROW,
   ICON_URL,
-  INTRO,
   SECOND_ROW,
   THIRD_ROW,
 } from "@/app/shared/constant";
@@ -10,8 +9,12 @@ import type { CareerLogo } from "@/app/shared/interface";
 import { marked } from "marked";
 import Image from "next/image";
 import { getGithub } from "./api/github";
+import { getGitHubRepos } from "./api/github-repos";
 import ImageSection from "./components/image-sticky";
 import { IconLink } from "./components/icons/icons";
+import ContactCTA from "./components/contact-cta";
+import InteractiveTerminal from "./components/interactive-terminal";
+import NowDashboard from "./components/now-dashboard";
 import { Marquee } from "./components/marquee";
 import { ScrollReveal } from "./components/scroll-reveal";
 import TechIcon from "./components/tech-icon";
@@ -24,9 +27,6 @@ export async function generateMetadata() {
   };
 }
 
-function assertNever(value: never): never {
-  throw new Error(`Unhandled: ${JSON.stringify(value)}`);
-}
 function renderCareerLogo(logo: CareerLogo) {
   switch (logo.kind) {
     case "icon":
@@ -47,16 +47,32 @@ function renderCareerLogo(logo: CareerLogo) {
           className="p-2 h-full w-full object-contain"
         />
       );
-    case "text":
-      return <span className="text-xs font-bold">{logo.text}</span>;
-    default:
-      return assertNever(logo);
   }
 }
 
 export default async function Home() {
-  const readme = await getGithub();
-  const readmeHtml = readme ? marked.parse(readme, { async: false }) : "";
+  const [readme, repos] = await Promise.all([
+    getGithub(),
+    getGitHubRepos(),
+  ]);
+  const readmeHtml = readme ? marked.parse(readme, { async: false }) as string : "";
+
+  // Focus project = most recently pushed repo
+  const focusRepo = repos[0] ?? null;
+  const focusProject = focusRepo
+    ? {
+        name: focusRepo.name,
+        description: focusRepo.description ?? "No description",
+        url: focusRepo.html_url,
+        language: focusRepo.language ?? "Unknown",
+        pushedAt: new Date(focusRepo.pushed_at).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
+      }
+    : null;
+
   return (
     <div className="pt-24 md:pt-36">
       <section className="relative section">
@@ -76,14 +92,8 @@ export default async function Home() {
             <span className="text-gradient">THAI TAI</span>
           </h1>
 
-          <div className="p-6 mt-10 max-w-2xl bg-[var(--surface)] border-2 border-[var(--border-heavy)]">
-            <span className="block mb-3 text-[var(--text-muted)] text-xs font-body font-bold tracking-widest uppercase">
-              <span className="text-[var(--yellow)]">&#x25A0;</span>{" "}
-              terminal.txt
-            </span>
-            <p className="text-[var(--text-secondary)] text-sm font-body leading-relaxed">
-              <span className="text-[var(--yellow)]">$</span> {INTRO}
-            </p>
+          <div className="mt-10">
+            <InteractiveTerminal focusProject={focusProject} />
           </div>
 
           <div className="flex flex-wrap mt-8 gap-3">
@@ -200,6 +210,14 @@ export default async function Home() {
         </section>
       </ScrollReveal>
 
+      <div className="section">
+        <hr className="my-16 rule" />
+      </div>
+
+      <ScrollReveal>
+        <NowDashboard />
+      </ScrollReveal>
+
       {readmeHtml && (
         <ScrollReveal>
           <section className="section mt-28 md:mt-36">
@@ -217,6 +235,10 @@ export default async function Home() {
       <div className="section">
         <hr className="my-16 rule" />
       </div>
+
+      <ScrollReveal>
+        <ContactCTA />
+      </ScrollReveal>
     </div>
   );
 }

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro, Courier_Prime } from "next/font/google";
+import { Be_Vietnam_Pro, Courier_Prime, Geist } from "next/font/google";
 import Footer from "./components/footer";
 import Header from "./components/header";
 import { getBaseUrl } from "./lib/base-url";
 import "./globals.css";
 import { Providers } from "./providers/providers";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const display = Be_Vietnam_Pro({
   subsets: ["latin"],
@@ -55,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <body className={`${display.variable} ${body.variable} font-body antialiased`}>
         <div className="grid-bg" />
         <Providers>

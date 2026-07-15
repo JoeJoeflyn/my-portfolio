@@ -1,7 +1,7 @@
 import { getGitHubContributions } from "../api/github-contributions";
 import { getAllTime, getSummaries, getYearStats, getYearSummaries } from "../api/wakatime";
 import StatsCard from "../components/stat-card";
-import { CalendarHeatmapComponent, ChartBar } from "../components/waka-time-content";
+import { CalendarHeatmapComponent, ChartBar } from "../components/waka-dynamic";
 import { ScrollReveal } from "../components/scroll-reveal";
 import type { WakaSummaryType } from "../shared/interface";
 

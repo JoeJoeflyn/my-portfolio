@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch 001 — Project Case Study</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--yellow); color: #000; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-heavy); }
+
+  /* Variant nav */
+  #variant-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+    background: rgba(17,17,17,0.95); backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--border-heavy);
+    padding: 10px 16px; display: flex; gap: 8px; align-items: center;
+    font-family: var(--font-body);
+  }
+  .variant-tab {
+    background: var(--surface); color: var(--text-secondary);
+    border: 2px solid var(--border-heavy); border-radius: 0;
+    padding: 6px 14px; font-family: var(--font-body); font-weight: 700;
+    font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.1s step-end;
+  }
+  .variant-tab:hover { border-color: var(--yellow); color: var(--yellow); }
+  .variant-tab.active { border-color: var(--yellow); color: var(--yellow); background: var(--surface-high); }
+  .nav-spacer { flex: 1; }
+  .nav-label { color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  .variant { display: none; padding-top: 64px; }
+  .variant.active { display: block; }
+
+  /* Shared atoms */
+  .section-label {
+    display: inline-block; font-family: var(--font-body); font-weight: 700;
+    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-muted); padding: 4px 10px;
+    background: var(--surface); border: 2px solid var(--border-heavy);
+  }
+  .card {
+    background: var(--surface); border: 2px solid var(--border-heavy);
+    border-radius: 0; transition: transform 0.1s step-end, box-shadow 0.1s step-end;
+  }
+  .card:hover { border-color: var(--yellow); box-shadow: 6px 6px 0 var(--yellow); transform: translate(-2px,-2px); }
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    border: 2px solid var(--border-heavy); color: var(--text-secondary);
+    background: var(--surface); border-radius: 0; cursor: default;
+    transition: all 0.1s step-end;
+  }
+  .tag:hover { border-color: var(--yellow); color: var(--yellow); }
+  .text-gradient {
+    background: linear-gradient(135deg, var(--yellow) 0%, var(--blue) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 64px 64px; opacity: 0.25;
+    mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%);
+  }
+  .content { position: relative; z-index: 1; }
+
+  /* ===== Variant A: IDE Split ===== */
+  .ide-wrap { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 64px); }
+  .ide-sidebar {
+    background: var(--surface); border-right: 2px solid var(--border-heavy);
+    padding: 24px 0; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto;
+  }
+  .ide-project-head { padding: 0 20px 20px; border-bottom: 2px solid var(--border-heavy); margin-bottom: 16px; }
+  .ide-project-head .pname { font-family: var(--font-display); font-weight: 800; font-size: 18px; }
+  .ide-project-head .pmeta { color: var(--text-muted); font-size: 11px; margin-top: 4px; letter-spacing: 0.1em; }
+  .file-tree { list-style: none; padding: 0; margin: 0; }
+  .file-tree li {
+    padding: 8px 20px; color: var(--text-secondary); font-size: 13px;
+    cursor: pointer; border-left: 3px solid transparent; transition: all 0.1s step-end;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .file-tree li:hover { color: var(--yellow); background: var(--surface-high); }
+  .file-tree li.active { color: var(--yellow); border-left-color: var(--yellow); background: var(--surface-high); }
+  .file-tree .ic { width: 14px; color: var(--text-muted); }
+  .file-tree li.active .ic { color: var(--yellow); }
+  .ide-main { padding: 40px 48px; max-width: 900px; }
+  .ide-breadcrumb { color: var(--text-muted); font-size: 12px; margin-bottom: 24px; letter-spacing: 0.05em; }
+  .ide-breadcrumb .sep { color: var(--border-heavy); margin: 0 6px; }
+  .ide-h1 { font-family: var(--font-display); font-weight: 900; font-size: 48px; line-height: 0.9; letter-spacing: -0.03em; margin: 0 0 12px; }
+  .ide-sub { color: var(--text-secondary); font-size: 15px; line-height: 1.6; max-width: 620px; margin-bottom: 28px; }
+  .ide-sec { margin-top: 40px; }
+  .ide-sec h2 { font-family: var(--font-display); font-weight: 800; font-size: 22px; margin: 0 0 16px; display: flex; align-items: center; gap: 12px; }
+  .ide-sec h2 .num { color: var(--yellow); font-family: var(--font-body); font-size: 14px; }
+  .ide-sec p { color: var(--text-secondary); font-size: 14px; line-height: 1.7; max-width: 640px; }
+  .metric-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 20px; }
+  .metric { background: var(--surface); border: 2px solid var(--border-heavy); padding: 20px; }
+  .metric .v { font-family: var(--font-display); font-weight: 900; font-size: 32px; color: var(--yellow); }
+  .metric .k { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 6px; }
+  .stack-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+  /* ===== Variant B: Linear Long-Read ===== */
+  .lin-wrap { max-width: 760px; margin: 0 auto; padding: 56px 24px 120px; }
+  .lin-back { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 12px; text-decoration: none; margin-bottom: 40px; border: 2px solid var(--border-heavy); padding: 6px 12px; transition: all 0.1s step-end; }
+  .lin-back:hover { color: var(--yellow); border-color: var(--yellow); }
+  .lin-h1 { font-family: var(--font-display); font-weight: 900; font-size: 64px; line-height: 0.85; letter-spacing: -0.04em; margin: 0 0 8px; }
+  .lin-lede { color: var(--text-secondary); font-size: 18px; line-height: 1.5; margin: 24px 0 40px; max-width: 600px; }
+  .lin-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
+  .lin-sec { margin-top: 64px; }
+  .lin-sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; }
+  .lin-sec-head .num { font-family: var(--font-display); font-weight: 900; font-size: 40px; color: var(--border-heavy); line-height: 1; }
+  .lin-sec-head h2 { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 0; }
+  .lin-sec p { color: var(--text-secondary); font-size: 15px; line-height: 1.75; }
+  .lin-sec p + p { margin-top: 16px; }
+  .lin-quote { border-left: 3px solid var(--yellow); padding: 8px 0 8px 20px; margin: 24px 0; color: var(--text-primary); font-style: italic; font-size: 16px; }
+  .lin-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin: 32px 0; border: 2px solid var(--border-heavy); }
+  .lin-metrics .m { padding: 24px; border-right: 2px solid var(--border-heavy); }
+  .lin-metrics .m:last-child { border-right: none; }
+  .lin-metrics .v { font-family: var(--font-display); font-weight: 900; font-size: 36px; color: var(--yellow); }
+  .lin-metrics .k { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 6px; }
+  .lin-rule { height: 3px; background: var(--border-heavy); border: none; margin: 64px 0; }
+
+  /* ===== Variant C: Bento Grid ===== */
+  .bento-wrap { max-width: 1200px; margin: 0 auto; padding: 48px 24px 120px; }
+  .bento-head { margin-bottom: 32px; }
+  .bento-h1 { font-family: var(--font-display); font-weight: 900; font-size: 56px; line-height: 0.85; letter-spacing: -0.04em; margin: 12px 0 16px; }
+  .bento-sub { color: var(--text-secondary); font-size: 15px; line-height: 1.6; max-width: 540px; }
+  .bento-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .bento-cell { background: var(--surface); border: 2px solid var(--border-heavy); padding: 24px; transition: transform 0.1s step-end, box-shadow 0.1s step-end; }
+  .bento-cell:hover { border-color: var(--yellow); box-shadow: 6px 6px 0 var(--yellow); transform: translate(-2px,-2px); }
+  .bento-cell .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 12px; }
+  .bento-cell h3 { font-family: var(--font-display); font-weight: 800; font-size: 20px; margin: 0 0 10px; }
+  .bento-cell p { color: var(--text-secondary); font-size: 13px; line-height: 1.6; margin: 0; }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 3; }
+  .span-4 { grid-column: span 4; }
+  .span-6 { grid-column: span 6; }
+  .bento-metric .v { font-family: var(--font-display); font-weight: 900; font-size: 44px; color: var(--yellow); line-height: 1; }
+  .bento-metric .k { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 8px; }
+  .bento-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .bento-gallery { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 12px; }
+  .bento-gallery .shot { aspect-ratio: 4/3; background: var(--surface-high); border: 2px solid var(--border-heavy); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 11px; cursor: pointer; transition: all 0.1s step-end; }
+  .bento-gallery .shot:hover { border-color: var(--yellow); color: var(--yellow); }
+  .bento-link { display: inline-flex; align-items: center; gap: 8px; color: var(--yellow); font-size: 13px; font-weight: 700; text-decoration: none; border: 2px solid var(--yellow); padding: 8px 16px; margin-top: 12px; transition: all 0.1s step-end; }
+  .bento-link:hover { background: var(--yellow); color: #000; }
+
+  /* Sketch toolbar */
+  #sketch-tools { position: fixed; bottom: 12px; right: 12px; z-index: 9999; font-family: var(--font-body); font-size: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 8px 12px; border-radius: 6px; opacity: 0.4; transition: opacity 0.2s; display: flex; gap: 12px; align-items: center; }
+  #sketch-tools:hover { opacity: 1; }
+  #sketch-tools button { background: transparent; border: 1px solid #555; color: #fff; padding: 3px 8px; font-size: 11px; cursor: pointer; border-radius: 4px; }
+  #sketch-tools button:hover { border-color: #fff; }
+  #sketch-tools select { background: #222; color: #fff; border: 1px solid #555; font-size: 11px; padding: 3px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div id="variant-nav">
+  <span class="nav-label">SKETCH 001 // CASE STUDY</span>
+  <div class="nav-spacer"></div>
+  <button class="variant-tab active" onclick="showVariant('a',event)">A: IDE Split ★ Selected</button>
+  <button class="variant-tab" onclick="showVariant('b',event)">B: Linear Long-Read</button>
+  <button class="variant-tab" onclick="showVariant('c',event)">C: Bento Grid</button>
+</div>
+
+<!-- ===== VARIANT A: IDE SPLIT ===== -->
+<div id="variant-a" class="variant active content">
+  <div class="ide-wrap">
+    <aside class="ide-sidebar">
+      <div class="ide-project-head">
+        <div class="pname">KamehaDB</div>
+        <div class="pmeta">PROJECT // 2024</div>
+      </div>
+      <ul class="file-tree">
+        <li class="active" onclick="ideGo(this,'overview')"><span class="ic">&#9632;</span> overview.md</li>
+        <li onclick="ideGo(this,'problem')"><span class="ic">&#9632;</span> problem.md</li>
+        <li onclick="ideGo(this,'approach')"><span class="ic">&#9632;</span> approach.md</li>
+        <li onclick="ideGo(this,'outcome')"><span class="ic">&#9632;</span> outcome.md</li>
+        <li onclick="ideGo(this,'stack')"><span class="ic">&#9632;</span> stack.json</li>
+        <li onclick="ideGo(this,'repo')"><span class="ic">&#8599;</span> repository.link</li>
+      </ul>
+    </aside>
+    <main class="ide-main" id="ide-pane">
+      <div class="ide-breadcrumb">projects <span class="sep">/</span> kamehadb <span class="sep">/</span> <span id="ide-crumb" style="color:var(--yellow)">overview.md</span></div>
+      <h1 class="ide-h1">KamehaDB</h1>
+      <p class="ide-sub">Local-first, cross-platform database GUI with built-in AI chat and a Monaco editor. Built for developers who want a single tool to inspect, query, and reason about their data without leaving the desktop.</p>
+
+      <div class="ide-sec" id="overview">
+        <h2><span class="num">01</span> Overview</h2>
+        <p>KamehaDB is a desktop application that bundles a database explorer, a Monaco-backed SQL editor, and an AI assistant into one window. The goal: collapse the tab-switching tax between db client, editor, and chat into a single focused surface.</p>
+      </div>
+      <div class="ide-sec" id="problem">
+        <h2><span class="num">02</span> Problem</h2>
+        <p>Developers juggle three tools to work with a database: a GUI client to browse, an editor to write queries, and a chat window to ask an LLM what a query does. Context lives in clipboards and screenshots. KamehaDB asks: what if all three shared one context?</p>
+      </div>
+      <div class="ide-sec" id="approach">
+        <h2><span class="num">03</span> Approach</h2>
+        <p>Tauri shell for a small footprint, Monaco for the editor surface, and a local agent loop that sees the active schema and selection. The AI never guesses about columns it cannot see &mdash; it reads the same tree the developer does.</p>
+      </div>
+      <div class="ide-sec" id="outcome">
+        <h2><span class="num">04</span> Outcome</h2>
+        <p>Shipped cross-platform builds. The single-context loop cut query-to-answer time for the target workflow from minutes of tab-switching to a single inline turn.</p>
+        <div class="metric-row">
+          <div class="metric"><div class="v">3</div><div class="k">Platforms</div></div>
+          <div class="metric"><div class="v">1</div><div class="k">Window</div></div>
+          <div class="metric"><div class="v">~0</div><div class="k">Tab Switches</div></div>
+        </div>
+      </div>
+      <div class="ide-sec" id="stack">
+        <h2><span class="num">05</span> Stack</h2>
+        <div class="stack-row">
+          <span class="tag">Tauri</span><span class="tag">TypeScript</span><span class="tag">Monaco</span><span class="tag">Rust</span><span class="tag">SQLite</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== VARIANT B: LINEAR LONG-READ ===== -->
+<div id="variant-b" class="variant content">
+  <div class="lin-wrap">
+    <a class="lin-back" href="#" onclick="event.preventDefault()">&#8592; BACK TO PROJECTS</a>
+    <span class="section-label">CASE STUDY // 01</span>
+    <h1 class="lin-h1">KamehaDB</h1>
+    <p class="lin-lede">Local-first, cross-platform database GUI with built-in AI chat and a Monaco editor. One window for the whole query-to-answer loop.</p>
+    <div class="lin-meta">
+      <span class="tag">2024</span><span class="tag">SOLO</span><span class="tag">DESKTOP</span><span class="tag">OPEN SOURCE</span>
+    </div>
+
+    <div class="lin-sec">
+      <div class="lin-sec-head"><span class="num">01</span><h2>The Problem</h2></div>
+      <p>Developers juggle three tools to work with a database: a GUI client to browse, an editor to write queries, and a chat window to ask an LLM what a query does. Context lives in clipboards and screenshots.</p>
+      <div class="lin-quote">"What if all three shared one context?"</div>
+    </div>
+
+    <div class="lin-sec">
+      <div class="lin-sec-head"><span class="num">02</span><h2>The Approach</h2></div>
+      <p>Tauri shell for a small footprint, Monaco for the editor surface, and a local agent loop that sees the active schema and selection. The AI never guesses about columns it cannot see &mdash; it reads the same tree the developer does.</p>
+      <p>Every action stays in one window: browse the tree, write the query, ask about it, run it. No context hand-off between apps.</p>
+    </div>
+
+    <div class="lin-sec">
+      <div class="lin-sec-head"><span class="num">03</span><h2>The Outcome</h2></div>
+      <p>Shipped cross-platform builds. The single-context loop cut query-to-answer time from minutes of tab-switching to a single inline turn.</p>
+      <div class="lin-metrics">
+        <div class="m"><div class="v">3</div><div class="k">Platforms</div></div>
+        <div class="m"><div class="v">1</div><div class="k">Window</div></div>
+        <div class="m"><div class="v">~0</div><div class="k">Tab Switches</div></div>
+      </div>
+    </div>
+
+    <hr class="lin-rule">
+    <div class="lin-sec">
+      <div class="lin-sec-head"><span class="num">04</span><h2>Stack</h2></div>
+      <div class="stack-row" style="margin-top:8px">
+        <span class="tag">Tauri</span><span class="tag">TypeScript</span><span class="tag">Monaco</span><span class="tag">Rust</span><span class="tag">SQLite</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VARIANT C: BENTO GRID ===== -->
+<div id="variant-c" class="variant content">
+  <div class="bento-wrap">
+    <div class="bento-head">
+      <span class="section-label">CASE STUDY // 01</span>
+      <h1 class="bento-h1">KamehaDB</h1>
+      <p class="bento-sub">Local-first, cross-platform database GUI with built-in AI chat and a Monaco editor.</p>
+    </div>
+    <div class="bento-grid">
+      <div class="bento-cell span-4">
+        <div class="lbl">// PROBLEM</div>
+        <h3>Three tools, one job</h3>
+        <p>Developers juggle a GUI client, an editor, and a chat window to work with a database. Context lives in clipboards and screenshots. KamehaDB collapses them into one surface.</p>
+      </div>
+      <div class="bento-cell span-2 bento-metric">
+        <div class="lbl">// METRIC</div>
+        <div class="v">3</div><div class="k">Platforms shipped</div>
+      </div>
+
+      <div class="bento-cell span-3">
+        <div class="lbl">// APPROACH</div>
+        <h3>One shared context</h3>
+        <p>Tauri shell, Monaco editor, and a local agent loop that reads the same schema tree the developer does. The AI never guesses about columns it cannot see.</p>
+      </div>
+      <div class="bento-cell span-3">
+        <div class="lbl">// OUTCOME</div>
+        <h3>Minutes to one turn</h3>
+        <p>The single-context loop cut query-to-answer time from minutes of tab-switching to a single inline turn.</p>
+        <div class="bento-stack" style="margin-top:16px">
+          <span class="tag">1 WINDOW</span><span class="tag">~0 TAB SWITCHES</span>
+        </div>
+      </div>
+
+      <div class="bento-cell span-2 bento-metric">
+        <div class="lbl">// METRIC</div>
+        <div class="v">1</div><div class="k">Window, not three</div>
+      </div>
+      <div class="bento-cell span-2">
+        <div class="lbl">// STACK</div>
+        <div class="bento-stack">
+          <span class="tag">Tauri</span><span class="tag">TypeScript</span><span class="tag">Monaco</span><span class="tag">Rust</span><span class="tag">SQLite</span>
+        </div>
+      </div>
+      <div class="bento-cell span-2">
+        <div class="lbl">// LINKS</div>
+        <a class="bento-link" href="#" onclick="event.preventDefault()">&#8599; REPOSITORY</a>
+      </div>
+
+      <div class="bento-cell span-6">
+        <div class="lbl">// GALLERY</div>
+        <div class="bento-gallery">
+          <div class="shot" onclick="alert('shot 1')">SCREEN 01</div>
+          <div class="shot" onclick="alert('shot 2')">SCREEN 02</div>
+          <div class="shot" onclick="alert('shot 3')">SCREEN 03</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="sketch-tools" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.4'">
+  <select onchange="document.querySelector('link[href*=themes]').href='../themes/'+this.value+'.css'">
+    <option value="default">Default (dark)</option>
+  </select>
+  <button onclick="toggleLight()">LIGHT</button>
+  <button onclick="setViewport(375)">PHONE</button>
+  <button onclick="setViewport(768)">TAB</button>
+  <button onclick="setViewport(0)">FULL</button>
+</div>
+
+<script>
+function showVariant(id, e) {
+  document.querySelectorAll('.variant').forEach(v => v.style.display = 'none');
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  e.target.classList.add('active');
+}
+function ideGo(li, name) {
+  document.querySelectorAll('.file-tree li').forEach(l => l.classList.remove('active'));
+  li.classList.add('active');
+  document.getElementById('ide-crumb').textContent = name + '.md';
+  const target = document.getElementById(name);
+  if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function toggleLight() {
+  document.documentElement.classList.toggle('light');
+}
+function setViewport(w) {
+  const c = document.querySelector('.variant.active');
+  if (w === 0) { c.style.maxWidth = ''; c.style.margin = ''; }
+  else { c.style.maxWidth = w + 'px'; c.style.margin = '0 auto'; }
+}
+</script>
+</body>
+</html>

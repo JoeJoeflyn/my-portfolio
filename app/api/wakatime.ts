@@ -1,5 +1,12 @@
 import type { AllTimeType, WakaStatsType, WakaSummaryType } from "../shared/interface";
-import { getTime } from "../shared/utils";
+
+const getTime = () => {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const fmt = (d: Date) => d.toISOString().split("T")[0];
+  return { yesterday: fmt(yesterday), today: fmt(today) };
+};
 
 const WAKATIME_AUTH_SCHEMES = ["Bearer", "Basic"] as const;
 

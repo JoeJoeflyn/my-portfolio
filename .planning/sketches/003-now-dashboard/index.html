@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch 003 — Now Dashboard</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text-primary); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--yellow); color: #000; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-heavy); }
+
+  #variant-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 9998; background: rgba(17,17,17,0.95); backdrop-filter: blur(12px); border-bottom: 2px solid var(--border-heavy); padding: 10px 16px; display: flex; gap: 8px; align-items: center; }
+  .variant-tab { background: var(--surface); color: var(--text-secondary); border: 2px solid var(--border-heavy); border-radius: 0; padding: 6px 14px; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.1s step-end; }
+  .variant-tab:hover { border-color: var(--yellow); color: var(--yellow); }
+  .variant-tab.active { border-color: var(--yellow); color: var(--yellow); background: var(--surface-high); }
+  .nav-spacer { flex: 1; }
+  .nav-label { color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  .variant { display: none; padding-top: 64px; }
+  .variant.active { display: block; }
+  .grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 64px 64px; opacity: 0.25; mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%); }
+  .content { position: relative; z-index: 1; }
+  .section { padding: 0 16px; max-width: 1152px; margin: 0 auto; width: 100%; }
+  .section-label { display: inline-block; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted); padding: 4px 10px; background: var(--surface); border: 2px solid var(--border-heavy); }
+  .text-gradient { background: linear-gradient(135deg, var(--yellow) 0%, var(--blue) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .card { background: var(--surface); border: 2px solid var(--border-heavy); border-radius: 0; transition: transform 0.1s step-end, box-shadow 0.1s step-end; }
+  .card:hover { border-color: var(--yellow); box-shadow: 6px 6px 0 var(--yellow); transform: translate(-2px,-2px); }
+  .tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border: 2px solid var(--border-heavy); color: var(--text-secondary); background: var(--surface); border-radius: 0; transition: all 0.1s step-end; cursor: default; }
+
+  /* Heatmap */
+  .heatmap { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 3px; }
+  .hm-cell { width: 12px; height: 12px; border: 1px solid var(--border-heavy); transition: transform 0.05s step-end; cursor: pointer; }
+  .hm-cell:hover { transform: scale(1.4); border-color: var(--yellow); }
+  .hm-0 { background: var(--surface-high); }
+  .hm-y1 { background: rgba(255,215,0,0.15); }
+  .hm-y2 { background: rgba(255,215,0,0.3); }
+  .hm-y3 { background: rgba(255,215,0,0.5); }
+  .hm-y4 { background: rgba(255,215,0,0.75); }
+  .hm-y5 { background: var(--yellow); }
+  .hm-g1 { background: #0e4429; }
+  .hm-g2 { background: #006d32; }
+  .hm-g3 { background: #26a641; }
+  .hm-g4 { background: #39d353; }
+  .hm-legend { display: flex; align-items: center; gap: 4px; margin-top: 10px; font-size: 11px; color: var(--text-muted); }
+  .hm-legend .lc { width: 11px; height: 11px; border: 1px solid var(--border-heavy); }
+
+  .stat { padding: 20px; }
+  .stat .v { font-family: var(--font-display); font-weight: 900; font-size: 32px; color: var(--yellow); line-height: 1; }
+  .stat .k { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 8px; }
+  .stat .sub { color: var(--text-secondary); font-size: 12px; margin-top: 6px; }
+
+  .lang-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .lang-row .name { width: 90px; font-size: 12px; color: var(--text-secondary); }
+  .lang-bar { flex: 1; height: 14px; background: var(--surface-high); border: 1px solid var(--border-heavy); position: relative; }
+  .lang-bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--yellow); }
+  .lang-row .pct { width: 44px; text-align: right; font-size: 12px; color: var(--text-primary); font-weight: 700; }
+
+  .status-bar { display: flex; align-items: center; gap: 16px; padding: 12px 20px; background: var(--surface-high); border: 2px solid var(--border-heavy); margin-bottom: 24px; font-size: 12px; }
+  .status-bar .live { display: inline-flex; align-items: center; gap: 6px; color: #22c55e; font-weight: 700; }
+  .status-bar .live .pulse { width: 8px; height: 8px; background: #22c55e; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .status-bar .sep { color: var(--border-heavy); }
+  .status-bar .item { color: var(--text-muted); }
+  .status-bar .item b { color: var(--text-primary); }
+
+  .panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .panel-head .t { font-family: var(--font-display); font-weight: 800; font-size: 18px; }
+  .panel-head .meta { color: var(--text-muted); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; }
+
+  .wrap { padding: 80px 0 120px; }
+  .h1 { font-family: var(--font-display); font-weight: 900; font-size: 72px; line-height: 0.85; letter-spacing: -0.04em; margin: 16px 0 40px; }
+
+  /* A: stacked */
+  .a-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 40px; }
+  .a-panel { padding: 24px; margin-bottom: 32px; }
+  .a-panel .hm-scroll { overflow-x: auto; padding-bottom: 8px; }
+
+  /* B: two-col */
+  .b-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 860px) { .b-grid { grid-template-columns: 1fr; } }
+  .b-panel { padding: 24px; }
+  .b-panel .hm-scroll { overflow-x: auto; padding-bottom: 8px; }
+
+  /* C: bento */
+  .c-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .c-cell { background: var(--surface); border: 2px solid var(--border-heavy); padding: 24px; transition: transform 0.1s step-end, box-shadow 0.1s step-end; }
+  .c-cell:hover { border-color: var(--yellow); box-shadow: 6px 6px 0 var(--yellow); transform: translate(-2px,-2px); }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 3; }
+  .span-4 { grid-column: span 4; }
+  .span-6 { grid-column: span 6; }
+  .c-cell .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 12px; }
+  .c-cell h3 { font-family: var(--font-display); font-weight: 800; font-size: 18px; margin: 0 0 12px; }
+  .c-metric .v { font-family: var(--font-display); font-weight: 900; font-size: 40px; color: var(--yellow); line-height: 1; }
+  .c-metric .k { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 8px; }
+
+  #sketch-tools { position: fixed; bottom: 12px; right: 12px; z-index: 9999; font-family: var(--font-body); font-size: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 8px 12px; border-radius: 6px; opacity: 0.4; transition: opacity 0.2s; display: flex; gap: 12px; align-items: center; }
+  #sketch-tools:hover { opacity: 1; }
+  #sketch-tools button { background: transparent; border: 1px solid #555; color: #fff; padding: 3px 8px; font-size: 11px; cursor: pointer; border-radius: 4px; }
+  #sketch-tools button:hover { border-color: #fff; }
+  #sketch-tools select { background: #222; color: #fff; border: 1px solid #555; font-size: 11px; padding: 3px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div id="variant-nav">
+  <span class="nav-label">SKETCH 003 // NOW</span>
+  <div class="nav-spacer"></div>
+  <button class="variant-tab active" onclick="showVariant('a',event)">A: Stacked Report</button>
+  <button class="variant-tab" onclick="showVariant('b',event)">B: Two-Column</button>
+  <button class="variant-tab" onclick="showVariant('c',event)">C: Command Bento ★ Selected</button>
+</div>
+
+<!-- ===== VARIANT A: STACKED REPORT ===== -->
+<div id="variant-a" class="variant active content">
+  <div class="section wrap">
+    <span class="section-label">NOW // ACTIVITY</span>
+    <h1 class="h1">What I'm <span class="text-gradient">building</span></h1>
+
+    <div class="status-bar">
+      <span class="live"><span class="pulse"></span> ONLINE</span>
+      <span class="sep">|</span>
+      <span class="item">Ho Chi Minh City <b id="a-clock">--:--:--</b></span>
+      <span class="sep">|</span>
+      <span class="item">coding today: <b>4h 12m</b></span>
+      <span class="sep">|</span>
+      <span class="item">streak: <b>23 days</b></span>
+    </div>
+
+    <div class="a-stats">
+      <div class="card stat"><div class="v">412</div><div class="k">Commits / yr</div><div class="sub">+18% vs last year</div></div>
+      <div class="card stat"><div class="v">1,840h</div><div class="k">Coded total</div><div class="sub">since Jan 2024</div></div>
+      <div class="card stat"><div class="v">23</div><div class="k">Day streak</div><div class="sub">longest: 41</div></div>
+      <div class="card stat"><div class="v">7</div><div class="k">Repos active</div><div class="sub">2 owned, 5 contrib</div></div>
+    </div>
+
+    <div class="card a-panel">
+      <div class="panel-head"><span class="t">GitHub &mdash; contributions</span><span class="meta">last 26 weeks</span></div>
+      <div class="hm-scroll"><div class="heatmap" id="hm-gh-a"></div></div>
+      <div class="hm-legend">Less <span class="lc hm-0"></span><span class="lc hm-g1"></span><span class="lc hm-g2"></span><span class="lc hm-g3"></span><span class="lc hm-g4"></span> More</div>
+    </div>
+
+    <div class="card a-panel">
+      <div class="panel-head"><span class="t">WakaTime &mdash; coding hours</span><span class="meta">last 26 weeks</span></div>
+      <div class="hm-scroll"><div class="heatmap" id="hm-wt-a"></div></div>
+      <div class="hm-legend">Less <span class="lc hm-0"></span><span class="lc hm-y1"></span><span class="lc hm-y2"></span><span class="lc hm-y3"></span><span class="lc hm-y5"></span> More</div>
+      <div style="margin-top:24px">
+        <div class="panel-head" style="margin-bottom:12px"><span class="t" style="font-size:14px">Top languages</span></div>
+        <div id="langs-a"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VARIANT B: TWO-COLUMN ===== -->
+<div id="variant-b" class="variant content">
+  <div class="section wrap">
+    <span class="section-label">NOW // ACTIVITY</span>
+    <h1 class="h1">What I'm <span class="text-gradient">building</span></h1>
+    <div class="b-grid">
+      <div class="card b-panel">
+        <div class="panel-head"><span class="t">GitHub</span><span class="meta">26 weeks</span></div>
+        <div class="hm-scroll"><div class="heatmap" id="hm-gh-b"></div></div>
+        <div class="hm-legend">Less <span class="lc hm-0"></span><span class="lc hm-g1"></span><span class="lc hm-g2"></span><span class="lc hm-g3"></span><span class="lc hm-g4"></span> More</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px">
+          <div class="stat" style="padding:0"><div class="v" style="font-size:24px">412</div><div class="k">commits / yr</div></div>
+          <div class="stat" style="padding:0"><div class="v" style="font-size:24px">23</div><div class="k">day streak</div></div>
+        </div>
+      </div>
+      <div class="card b-panel">
+        <div class="panel-head"><span class="t">WakaTime</span><span class="meta">26 weeks</span></div>
+        <div class="hm-scroll"><div class="heatmap" id="hm-wt-b"></div></div>
+        <div class="hm-legend">Less <span class="lc hm-0"></span><span class="lc hm-y1"></span><span class="lc hm-y2"></span><span class="lc hm-y3"></span><span class="lc hm-y5"></span> More</div>
+        <div style="margin-top:20px">
+          <div class="panel-head" style="margin-bottom:12px"><span class="t" style="font-size:14px">Top languages</span></div>
+          <div id="langs-b"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VARIANT C: COMMAND BENTO ===== -->
+<div id="variant-c" class="variant content">
+  <div class="section wrap">
+    <span class="section-label">NOW // ACTIVITY</span>
+    <h1 class="h1">What I'm <span class="text-gradient">building</span></h1>
+    <div class="c-grid">
+      <div class="c-cell span-4">
+        <div class="lbl">// github contributions</div>
+        <div class="hm-scroll" style="overflow-x:auto"><div class="heatmap" id="hm-gh-c"></div></div>
+        <div class="hm-legend">Less <span class="lc hm-0"></span><span class="lc hm-g1"></span><span class="lc hm-g2"></span><span class="lc hm-g3"></span><span class="lc hm-g4"></span> More</div>
+      </div>
+      <div class="c-cell span-2 c-metric">
+        <div class="lbl">// commits</div>
+        <div class="v">412</div><div class="k">this year</div>
+        <div style="margin-top:16px"><div class="v" style="font-size:28px">23</div><div class="k">day streak</div></div>
+      </div>
+
+      <div class="c-cell span-2 c-metric">
+        <div class="lbl">// coded</div>
+        <div class="v">1,840h</div><div class="k">since jan 2024</div>
+      </div>
+      <div class="c-cell span-2">
+        <div class="lbl">// wakatime</div>
+        <div class="hm-scroll" style="overflow-x:auto"><div class="heatmap" id="hm-wt-c" style="grid-template-rows:repeat(7,1fr)"></div></div>
+      </div>
+      <div class="c-cell span-2">
+        <div class="lbl">// top languages</div>
+        <div id="langs-c"></div>
+      </div>
+
+      <div class="c-cell span-6">
+        <div class="lbl">// currently building</div>
+        <h3>KamehaDB &mdash; local-first database GUI</h3>
+        <p style="color:var(--text-secondary); font-size:13px; line-height:1.6; margin:0">Tauri shell, Monaco editor, AI chat that reads the active schema. Shipping cross-platform builds. <span style="color:var(--yellow)">last commit 2h ago.</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="sketch-tools" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.4'">
+  <select onchange="document.querySelector('link[href*=themes]').href='../themes/'+this.value+'.css'">
+    <option value="default">Default (dark)</option>
+  </select>
+  <button onclick="toggleLight()">LIGHT</button>
+  <button onclick="setViewport(375)">PHONE</button>
+  <button onclick="setViewport(768)">TAB</button>
+  <button onclick="setViewport(0)">FULL</button>
+</div>
+
+<script>
+function showVariant(id, e) {
+  document.querySelectorAll('.variant').forEach(v => v.style.display = 'none');
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  e.target.classList.add('active');
+  renderAll();
+  if (id === 'a') startClock();
+}
+function toggleLight() { document.documentElement.classList.toggle('light'); }
+function setViewport(w) {
+  const c = document.querySelector('.variant.active');
+  if (w === 0) { c.style.maxWidth = ''; c.style.margin = ''; }
+  else { c.style.maxWidth = w + 'px'; c.style.margin = '0 auto'; }
+}
+
+/* Deterministic pseudo-random heatmap generator */
+function seed(s) { return () => { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; }; }
+function buildHeatmap(elId, weeks, prefix, rng) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = '';
+  const total = weeks * 7;
+  for (let i = 0; i < total; i++) {
+    const r = rng();
+    let lvl = 0;
+    if (r > 0.45) lvl = 1;
+    if (r > 0.62) lvl = 2;
+    if (r > 0.78) lvl = 3;
+    if (r > 0.9) lvl = 4;
+    if (r > 0.97) lvl = 5;
+    const c = document.createElement('div');
+    c.className = 'hm-cell ' + prefix + lvl;
+    c.title = `week ${Math.floor(i/7)+1}, day ${i%7} — level ${lvl}`;
+    el.appendChild(c);
+  }
+}
+const langs = [
+  { name: 'TypeScript', pct: 38 },
+  { name: 'Rust', pct: 22 },
+  { name: 'Python', pct: 14 },
+  { name: 'Go', pct: 11 },
+  { name: 'Other', pct: 15 },
+];
+function buildLangs(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = '';
+  langs.forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'lang-row';
+    row.innerHTML = `<span class="name">${l.name}</span><div class="lang-bar"><div class="fill" style="width:${l.pct}%"></div></div><span class="pct">${l.pct}%</span>`;
+    el.appendChild(row);
+  });
+}
+function renderAll() {
+  buildHeatmap('hm-gh-a', 26, 'hm-g', seed(42));
+  buildHeatmap('hm-wt-a', 26, 'hm-y', seed(77));
+  buildHeatmap('hm-gh-b', 26, 'hm-g', seed(42));
+  buildHeatmap('hm-wt-b', 26, 'hm-y', seed(77));
+  buildHeatmap('hm-gh-c', 26, 'hm-g', seed(42));
+  buildHeatmap('hm-wt-c', 26, 'hm-y', seed(77));
+  buildLangs('langs-a'); buildLangs('langs-b'); buildLangs('langs-c');
+}
+let clockTimer = null;
+function startClock() {
+  const update = () => { const el = document.getElementById('a-clock'); if (el) el.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh' }); };
+  update();
+  if (clockTimer) clearInterval(clockTimer);
+  clockTimer = setInterval(update, 1000);
+}
+renderAll();
+startClock();
+</script>
+</body>
+</html>

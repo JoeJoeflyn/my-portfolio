@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch 004 — Contact CTA</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text-primary); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--yellow); color: #000; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-heavy); }
+
+  #variant-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 9998; background: rgba(17,17,17,0.95); backdrop-filter: blur(12px); border-bottom: 2px solid var(--border-heavy); padding: 10px 16px; display: flex; gap: 8px; align-items: center; }
+  .variant-tab { background: var(--surface); color: var(--text-secondary); border: 2px solid var(--border-heavy); border-radius: 0; padding: 6px 14px; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.1s step-end; }
+  .variant-tab:hover { border-color: var(--yellow); color: var(--yellow); }
+  .variant-tab.active { border-color: var(--yellow); color: var(--yellow); background: var(--surface-high); }
+  .nav-spacer { flex: 1; }
+  .nav-label { color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  .variant { display: none; padding-top: 64px; }
+  .variant.active { display: block; }
+  .grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 64px 64px; opacity: 0.25; mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%); }
+  .content { position: relative; z-index: 1; }
+  .section { padding: 0 16px; max-width: 1152px; margin: 0 auto; width: 100%; }
+  .section-label { display: inline-block; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted); padding: 4px 10px; background: var(--surface); border: 2px solid var(--border-heavy); }
+  .text-gradient { background: linear-gradient(135deg, var(--yellow) 0%, var(--blue) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .card { background: var(--surface); border: 2px solid var(--border-heavy); border-radius: 0; }
+  .icon-link { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 2px solid var(--border-heavy); background: var(--surface); color: var(--text-secondary); transition: all 0.1s step-end; text-decoration: none; font-weight: 700; font-size: 12px; }
+  .icon-link:hover { border-color: var(--yellow); color: var(--yellow); box-shadow: 4px 4px 0 var(--yellow); transform: translate(-2px,-2px); }
+  .wrap { padding: 80px 0 120px; }
+
+  /* A: terminal prompt */
+  .a-term { max-width: 640px; background: #0c0c0c; border: 2px solid var(--border-heavy); box-shadow: 6px 6px 0 var(--border-heavy); }
+  .a-term-bar { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 2px solid var(--border-heavy); background: var(--surface); }
+  .a-term-bar .tdot { width: 12px; height: 12px; border: 2px solid var(--border-heavy); }
+  .a-term-bar .ttitle { margin-left: 8px; color: var(--text-muted); font-size: 12px; letter-spacing: 0.1em; }
+  .a-term-body { padding: 24px; font-size: 14px; line-height: 1.7; color: var(--text-secondary); }
+  .a-line { white-space: pre-wrap; margin-bottom: 8px; }
+  .a-cmd { color: var(--yellow); }
+  .a-ok { color: #22c55e; }
+  .a-field { margin-top: 16px; }
+  .a-field .flbl { display: block; color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  .a-field input, .a-field textarea { width: 100%; background: var(--surface-high); border: 2px solid var(--border-heavy); color: var(--text-primary); font-family: var(--font-body); font-size: 14px; padding: 10px 12px; outline: none; transition: border-color 0.1s step-end; }
+  .a-field input:focus, .a-field textarea:focus { border-color: var(--yellow); }
+  .a-field textarea { resize: vertical; min-height: 80px; }
+  .a-send { margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border: 2px solid var(--yellow); background: transparent; color: var(--yellow); font-family: var(--font-body); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.1s step-end; }
+  .a-send:hover { background: var(--yellow); color: #000; box-shadow: 6px 6px 0 var(--border-heavy); transform: translate(-2px,-2px); }
+  .a-send:disabled { opacity: 0.5; cursor: wait; }
+  .a-success { margin-top: 16px; padding: 14px; border: 2px solid #22c55e; color: #22c55e; font-size: 13px; display: none; }
+  .a-success.show { display: block; }
+  .a-socials { display: flex; gap: 12px; margin-top: 32px; }
+
+  /* B: big CTA */
+  .b-center { text-align: left; max-width: 900px; }
+  .b-h1 { font-family: var(--font-display); font-weight: 900; font-size: 128px; line-height: 0.82; letter-spacing: -0.05em; margin: 16px 0 24px; }
+  .b-status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border: 2px solid #22c55e; color: #22c55e; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 32px; }
+  .b-status .pulse { width: 9px; height: 9px; background: #22c55e; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .b-sub { color: var(--text-secondary); font-size: 18px; line-height: 1.5; max-width: 560px; margin-bottom: 40px; }
+  .b-email { display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px; border: 2px solid var(--yellow); color: var(--yellow); font-family: var(--font-body); font-weight: 700; font-size: 18px; text-decoration: none; transition: all 0.1s step-end; cursor: pointer; }
+  .b-email:hover { background: var(--yellow); color: #000; box-shadow: 8px 8px 0 var(--border-heavy); transform: translate(-3px,-3px); }
+  .b-socials { display: flex; gap: 12px; margin-top: 40px; }
+  .b-meta { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 32px; color: var(--text-muted); font-size: 13px; }
+  .b-meta b { color: var(--text-primary); }
+
+  /* C: card + form */
+  .c-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; }
+  @media (max-width: 860px) { .c-grid { grid-template-columns: 1fr; } }
+  .c-card { padding: 28px; }
+  .c-card h3 { font-family: var(--font-display); font-weight: 800; font-size: 24px; margin: 0 0 20px; }
+  .c-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .c-row:last-child { border-bottom: none; }
+  .c-row .k { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .c-row .v { color: var(--text-primary); font-size: 14px; font-weight: 700; }
+  .c-row .v.acc { color: var(--yellow); }
+  .c-row .v.ok { color: #22c55e; }
+  .c-form { padding: 28px; }
+  .c-form h3 { font-family: var(--font-display); font-weight: 800; font-size: 24px; margin: 0 0 20px; }
+  .c-field { margin-bottom: 16px; }
+  .c-field .flbl { display: block; color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  .c-field input, .c-field textarea { width: 100%; background: var(--surface-high); border: 2px solid var(--border-heavy); color: var(--text-primary); font-family: var(--font-body); font-size: 14px; padding: 10px 12px; outline: none; transition: border-color 0.1s step-end; }
+  .c-field input:focus, .c-field textarea:focus { border-color: var(--yellow); }
+  .c-field textarea { resize: vertical; min-height: 100px; }
+  .c-send { width: 100%; padding: 14px; border: 2px solid var(--yellow); background: transparent; color: var(--yellow); font-family: var(--font-body); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; transition: all 0.1s step-end; }
+  .c-send:hover { background: var(--yellow); color: #000; }
+  .c-send:disabled { opacity: 0.5; cursor: wait; }
+  .c-success { margin-top: 16px; padding: 14px; border: 2px solid #22c55e; color: #22c55e; font-size: 13px; display: none; }
+  .c-success.show { display: block; }
+
+  #sketch-tools { position: fixed; bottom: 12px; right: 12px; z-index: 9999; font-family: var(--font-body); font-size: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 8px 12px; border-radius: 6px; opacity: 0.4; transition: opacity 0.2s; display: flex; gap: 12px; align-items: center; }
+  #sketch-tools:hover { opacity: 1; }
+  #sketch-tools button { background: transparent; border: 1px solid #555; color: #fff; padding: 3px 8px; font-size: 11px; cursor: pointer; border-radius: 4px; }
+  #sketch-tools button:hover { border-color: #fff; }
+  #sketch-tools select { background: #222; color: #fff; border: 1px solid #555; font-size: 11px; padding: 3px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div id="variant-nav">
+  <span class="nav-label">SKETCH 004 // CONTACT</span>
+  <div class="nav-spacer"></div>
+  <button class="variant-tab active" onclick="showVariant('a',event)">A: Terminal Prompt</button>
+  <button class="variant-tab" onclick="showVariant('b',event)">B: Big CTA ★ Selected</button>
+  <button class="variant-tab" onclick="showVariant('c',event)">C: Card + Form</button>
+</div>
+
+<!-- ===== VARIANT A: TERMINAL PROMPT ===== -->
+<div id="variant-a" class="variant active content">
+  <div class="section wrap">
+    <span class="section-label">CONTACT // MESSAGE</span>
+    <h1 style="font-family:var(--font-display); font-weight:900; font-size:64px; line-height:0.85; letter-spacing:-0.04em; margin:16px 0 32px">Let's <span class="text-gradient">talk</span>.</h1>
+    <div class="a-term">
+      <div class="a-term-bar">
+        <span class="tdot" style="background:#ff5f56"></span>
+        <span class="tdot" style="background:#ffbd2e"></span>
+        <span class="tdot" style="background:#27c93f"></span>
+        <span class="ttitle">compose: new message</span>
+      </div>
+      <div class="a-term-body">
+        <div class="a-line"><span class="a-cmd">$</span> write a message &mdash; I read every one.</div>
+        <div class="a-line a-ok">[ready] cursor active. type below.</div>
+        <form onsubmit="return sendA(event)">
+          <div class="a-field">
+            <span class="flbl">// from</span>
+            <input id="a-name" placeholder="your name" required>
+          </div>
+          <div class="a-field">
+            <span class="flbl">// email</span>
+            <input id="a-email" type="email" placeholder="you@domain.com" required>
+          </div>
+          <div class="a-field">
+            <span class="flbl">// message</span>
+            <textarea id="a-msg" placeholder="what's on your mind?" required></textarea>
+          </div>
+          <button class="a-send" id="a-btn" type="submit">&#9654; SEND</button>
+        </form>
+        <div class="a-success" id="a-ok">&#10003; message sent. I'll reply within 48h.</div>
+      </div>
+    </div>
+    <div class="a-socials">
+      <a class="icon-link" href="#" onclick="event.preventDefault()">GH</a>
+      <a class="icon-link" href="#" onclick="event.preventDefault()">IN</a>
+      <a class="icon-link" href="#" onclick="event.preventDefault()">X</a>
+      <a class="icon-link" href="#" onclick="event.preventDefault()">@</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VARIANT B: BIG CTA ===== -->
+<div id="variant-b" class="variant content">
+  <div class="section wrap">
+    <div class="b-center">
+      <span class="section-label">CONTACT</span>
+      <div class="b-status"><span class="pulse"></span> OPEN TO WORK</div>
+      <h1 class="b-h1">LET'S<br><span class="text-gradient">BUILD.</span></h1>
+      <p class="b-sub">Full-stack web developer in Ho Chi Minh City. I build local-first tools, data GUIs, and AI interfaces. If that's the edge you need sharpened, send a line.</p>
+      <a class="b-email" href="mailto:thaitainguyen336@gmail.com" onclick="event.preventDefault()">&#9993; thaitainguyen336@gmail.com</a>
+      <div class="b-socials">
+        <a class="icon-link" href="#" onclick="event.preventDefault()">GH</a>
+        <a class="icon-link" href="#" onclick="event.preventDefault()">IN</a>
+        <a class="icon-link" href="#" onclick="event.preventDefault()">X</a>
+      </div>
+      <div class="b-meta">
+        <span>response time: <b>&lt; 48h</b></span>
+        <span>timezone: <b>ICT (UTC+7)</b></span>
+        <span>availability: <b>full-time / contract</b></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VARIANT C: CARD + FORM ===== -->
+<div id="variant-c" class="variant content">
+  <div class="section wrap">
+    <span class="section-label">CONTACT</span>
+    <h1 style="font-family:var(--font-display); font-weight:900; font-size:64px; line-height:0.85; letter-spacing:-0.04em; margin:16px 0 40px">Let's <span class="text-gradient">talk</span>.</h1>
+    <div class="c-grid">
+      <div class="card c-card">
+        <h3>Availability</h3>
+        <div class="c-row"><span class="k">Status</span><span class="v ok">OPEN TO WORK</span></div>
+        <div class="c-row"><span class="k">Response time</span><span class="v">&lt; 48h</span></div>
+        <div class="c-row"><span class="k">Timezone</span><span class="v">ICT (UTC+7)</span></div>
+        <div class="c-row"><span class="k">Location</span><span class="v">Ho Chi Minh City</span></div>
+        <div class="c-row"><span class="k">Engagement</span><span class="v acc">Full-time / Contract</span></div>
+        <div style="margin-top:24px">
+          <div class="c-row" style="border:none; padding:8px 0"><span class="k">Email</span><span class="v acc">hello@asta.dev</span></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:20px">
+          <a class="icon-link" href="#" onclick="event.preventDefault()">GH</a>
+          <a class="icon-link" href="#" onclick="event.preventDefault()">IN</a>
+          <a class="icon-link" href="#" onclick="event.preventDefault()">X</a>
+        </div>
+      </div>
+      <div class="card c-form">
+        <h3>Send a message</h3>
+        <form onsubmit="return sendC(event)">
+          <div class="c-field"><span class="flbl">// name</span><input id="c-name" placeholder="your name" required></div>
+          <div class="c-field"><span class="flbl">// email</span><input id="c-email" type="email" placeholder="you@domain.com" required></div>
+          <div class="c-field"><span class="flbl">// project type</span>
+            <select id="c-type" style="width:100%; background:var(--surface-high); border:2px solid var(--border-heavy); color:var(--text-primary); font-family:var(--font-body); font-size:14px; padding:10px 12px; outline:none">
+              <option>Full-stack web app</option>
+              <option>Local-first / desktop tool</option>
+              <option>AI integration</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div class="c-field"><span class="flbl">// message</span><textarea id="c-msg" placeholder="tell me about it" required></textarea></div>
+          <button class="c-send" id="c-btn" type="submit">&#9654; SEND MESSAGE</button>
+        </form>
+        <div class="c-success" id="c-ok">&#10003; message sent. I'll reply within 48h.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="sketch-tools" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.4'">
+  <select onchange="document.querySelector('link[href*=themes]').href='../themes/'+this.value+'.css'">
+    <option value="default">Default (dark)</option>
+  </select>
+  <button onclick="toggleLight()">LIGHT</button>
+  <button onclick="setViewport(375)">PHONE</button>
+  <button onclick="setViewport(768)">TAB</button>
+  <button onclick="setViewport(0)">FULL</button>
+</div>
+
+<script>
+function showVariant(id, e) {
+  document.querySelectorAll('.variant').forEach(v => v.style.display = 'none');
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  e.target.classList.add('active');
+}
+function toggleLight() { document.documentElement.classList.toggle('light'); }
+function setViewport(w) {
+  const c = document.querySelector('.variant.active');
+  if (w === 0) { c.style.maxWidth = ''; c.style.margin = ''; }
+  else { c.style.maxWidth = w + 'px'; c.style.margin = '0 auto'; }
+}
+function fakeSend(btn, okEl) {
+  btn.disabled = true; btn.textContent = 'SENDING...';
+  setTimeout(() => {
+    btn.disabled = false; btn.textContent = '\u25B6 SEND';
+    okEl.classList.add('show');
+    setTimeout(() => okEl.classList.remove('show'), 4000);
+  }, 900);
+}
+function sendA(e) { e.preventDefault(); fakeSend(document.getElementById('a-btn'), document.getElementById('a-ok')); return false; }
+function sendC(e) { e.preventDefault(); fakeSend(document.getElementById('c-btn'), document.getElementById('c-ok')); document.getElementById('c-btn').textContent = '\u25B6 SEND MESSAGE'; return false; }
+</script>
+</body>
+</html>

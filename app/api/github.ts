@@ -1,14 +1,8 @@
-import { ICON_URL } from "../shared/constant";
+import { getGitHubUsername } from "./github-username";
 
 export const getGithub = async () => {
   const apiToken = process.env.GITHUB_PAT;
-
-  const githubProfile = ICON_URL.find(
-    (link) => link.kind === "icon" && link.icon === "github",
-  )?.href;
-  const username = githubProfile
-    ?.replace("https://github.com/", "")
-    .split("/")[0];
+  const username = getGitHubUsername();
 
   if (!apiToken || !username) {
     console.warn("GitHub PAT or username not configured");

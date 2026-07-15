@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch 002 — Hero Rethink</title>
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text-primary); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--yellow); color: #000; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-heavy); }
+
+  #variant-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 9998; background: rgba(17,17,17,0.95); backdrop-filter: blur(12px); border-bottom: 2px solid var(--border-heavy); padding: 10px 16px; display: flex; gap: 8px; align-items: center; }
+  .variant-tab { background: var(--surface); color: var(--text-secondary); border: 2px solid var(--border-heavy); border-radius: 0; padding: 6px 14px; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.1s step-end; }
+  .variant-tab:hover { border-color: var(--yellow); color: var(--yellow); }
+  .variant-tab.active { border-color: var(--yellow); color: var(--yellow); background: var(--surface-high); }
+  .nav-spacer { flex: 1; }
+  .nav-label { color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  .variant { display: none; padding-top: 64px; }
+  .variant.active { display: block; }
+
+  .grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 64px 64px; opacity: 0.25; mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%); }
+  .content { position: relative; z-index: 1; }
+  .section { padding: 0 16px; max-width: 1152px; margin: 0 auto; width: 100%; }
+  .text-gradient { background: linear-gradient(135deg, var(--yellow) 0%, var(--blue) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border: 2px solid var(--border-heavy); color: var(--text-secondary); background: var(--surface); border-radius: 0; transition: all 0.1s step-end; cursor: default; }
+  .tag:hover { border-color: var(--yellow); color: var(--yellow); }
+  .icon-link { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 2px solid var(--border-heavy); background: var(--surface); color: var(--text-secondary); transition: all 0.1s step-end; text-decoration: none; }
+  .icon-link:hover { border-color: var(--yellow); color: var(--yellow); box-shadow: 4px 4px 0 var(--yellow); transform: translate(-2px,-2px); }
+
+  /* ===== Variant A: Current Baseline ===== */
+  .a-wrap { padding: 96px 0 64px; }
+  .a-top { display: flex; align-items: center; gap: 24px; margin-bottom: 48px; }
+  .a-avatar { width: 64px; height: 64px; background: var(--surface-high); border: 2px solid var(--border-heavy); display: flex; align-items: center; justify-content: center; color: var(--yellow); font-weight: 900; font-family: var(--font-display); }
+  .a-h1 { font-family: var(--font-display); font-weight: 900; font-size: 112px; line-height: 0.85; letter-spacing: -0.05em; margin: 0; }
+  .a-term { margin-top: 40px; max-width: 640px; background: var(--surface); border: 2px solid var(--border-heavy); padding: 24px; }
+  .a-term .lbl { display: block; margin-bottom: 12px; color: var(--text-muted); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+  .a-term .lbl .dot { color: var(--yellow); }
+  .a-term p { margin: 0; color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+  .a-term .prompt { color: var(--yellow); }
+  .a-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+  /* ===== Variant B: Interactive Terminal ===== */
+  .b-wrap { padding: 96px 0 64px; }
+  .b-head { margin-bottom: 32px; }
+  .b-h1 { font-family: var(--font-display); font-weight: 900; font-size: 96px; line-height: 0.85; letter-spacing: -0.05em; margin: 0; }
+  .b-term { max-width: 760px; background: #0c0c0c; border: 2px solid var(--border-heavy); box-shadow: 6px 6px 0 var(--border-heavy); font-family: var(--font-body); }
+  .b-term-bar { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 2px solid var(--border-heavy); background: var(--surface); }
+  .b-term-bar .tdot { width: 12px; height: 12px; border: 2px solid var(--border-heavy); }
+  .b-term-bar .ttitle { margin-left: 8px; color: var(--text-muted); font-size: 12px; letter-spacing: 0.1em; }
+  .b-term-body { padding: 20px 24px; min-height: 280px; font-size: 14px; line-height: 1.7; color: var(--text-secondary); }
+  .b-line { white-space: pre-wrap; }
+  .b-cmd { color: var(--yellow); }
+  .b-out { color: var(--text-secondary); }
+  .b-ok { color: #22c55e; }
+  .b-cursor { display: inline-block; width: 9px; height: 16px; background: var(--yellow); vertical-align: text-bottom; animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .b-input-row { display: flex; align-items: center; gap: 8px; }
+  .b-input-row .prompt { color: var(--yellow); }
+  .b-input { flex: 1; background: transparent; border: none; outline: none; color: var(--text-primary); font-family: var(--font-body); font-size: 14px; caret-color: var(--yellow); }
+  .b-hint { margin-top: 16px; color: var(--text-muted); font-size: 12px; }
+  .b-hint code { color: var(--yellow); background: var(--surface-high); border: 1px solid var(--border-heavy); padding: 1px 6px; }
+
+  /* ===== Variant C: Split + Now Panel ===== */
+  .c-wrap { padding: 96px 0 64px; }
+  .c-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start; }
+  @media (max-width: 860px) { .c-grid { grid-template-columns: 1fr; } }
+  .c-left .c-h1 { font-family: var(--font-display); font-weight: 900; font-size: 104px; line-height: 0.82; letter-spacing: -0.05em; margin: 0; }
+  .c-role { margin-top: 20px; color: var(--text-secondary); font-size: 16px; line-height: 1.6; max-width: 480px; }
+  .c-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .c-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border: 2px solid var(--border-heavy); background: var(--surface); color: var(--text-primary); font-family: var(--font-body); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.1s step-end; text-decoration: none; }
+  .c-btn:hover { border-color: var(--yellow); color: var(--yellow); box-shadow: 6px 6px 0 var(--yellow); transform: translate(-2px,-2px); }
+  .c-btn.primary { border-color: var(--yellow); color: var(--yellow); }
+  .c-btn.primary:hover { background: var(--yellow); color: #000; }
+  .c-socials { display: flex; gap: 12px; margin-top: 28px; }
+  .c-now { background: var(--surface); border: 2px solid var(--border-heavy); box-shadow: 6px 6px 0 var(--border-heavy); }
+  .c-now-head { padding: 14px 20px; border-bottom: 2px solid var(--border-heavy); display: flex; align-items: center; justify-content: space-between; background: var(--surface-high); }
+  .c-now-head .t { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+  .c-now-head .live { display: inline-flex; align-items: center; gap: 6px; color: #22c55e; font-size: 11px; font-weight: 700; }
+  .c-now-head .live .pulse { width: 8px; height: 8px; background: #22c55e; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .c-now-body { padding: 20px; }
+  .c-now-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .c-now-row:last-child { border-bottom: none; }
+  .c-now-row .k { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .c-now-row .v { color: var(--text-primary); font-size: 14px; font-weight: 700; }
+  .c-now-row .v.acc { color: var(--yellow); }
+  .c-now-focus { margin-top: 16px; padding: 16px; background: var(--surface-high); border: 2px solid var(--border-heavy); }
+  .c-now-focus .lbl { color: var(--text-muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .c-now-focus .txt { color: var(--text-primary); font-size: 14px; line-height: 1.5; }
+
+  #sketch-tools { position: fixed; bottom: 12px; right: 12px; z-index: 9999; font-family: var(--font-body); font-size: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 8px 12px; border-radius: 6px; opacity: 0.4; transition: opacity 0.2s; display: flex; gap: 12px; align-items: center; }
+  #sketch-tools:hover { opacity: 1; }
+  #sketch-tools button { background: transparent; border: 1px solid #555; color: #fff; padding: 3px 8px; font-size: 11px; cursor: pointer; border-radius: 4px; }
+  #sketch-tools button:hover { border-color: #fff; }
+  #sketch-tools select { background: #222; color: #fff; border: 1px solid #555; font-size: 11px; padding: 3px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div id="variant-nav">
+  <span class="nav-label">SKETCH 002 // HERO</span>
+  <div class="nav-spacer"></div>
+  <button class="variant-tab active" onclick="showVariant('a',event)">A: Current Baseline</button>
+  <button class="variant-tab" onclick="showVariant('b',event)">B: Interactive Terminal ★ Selected</button>
+  <button class="variant-tab" onclick="showVariant('c',event)">C: Split + Now</button>
+</div>
+
+<!-- ===== VARIANT A: CURRENT BASELINE ===== -->
+<div id="variant-a" class="variant active content">
+  <div class="section a-wrap">
+    <div class="a-top">
+      <div class="a-avatar">NT</div>
+      <div style="display:flex; gap:12px">
+        <a class="icon-link" href="#" onclick="event.preventDefault()">GH</a>
+        <a class="icon-link" href="#" onclick="event.preventDefault()">IN</a>
+        <a class="icon-link" href="#" onclick="event.preventDefault()">X</a>
+      </div>
+    </div>
+    <h1 class="a-h1">NGUYEN<br><span class="text-gradient">THAI TAI</span></h1>
+    <div class="a-term">
+      <span class="lbl"><span class="dot">&#x25A0;</span> terminal.txt</span>
+      <p><span class="prompt">$</span> Full-stack web developer based in Ho Chi Minh City. I build local-first tools, data GUIs, and the occasional AI-powered interface. Currently sharpening edges on open source.</p>
+    </div>
+    <div class="a-tags">
+      <span class="tag">FRESHER</span><span class="tag">HCMC</span><span class="tag">OPEN SOURCE</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VARIANT B: INTERACTIVE TERMINAL ===== -->
+<div id="variant-b" class="variant content">
+  <div class="section b-wrap">
+    <div class="b-head">
+      <h1 class="b-h1">NGUYEN<br><span class="text-gradient">THAI TAI</span></h1>
+    </div>
+    <div class="b-term">
+      <div class="b-term-bar">
+        <span class="tdot" style="background:#ff5f56"></span>
+        <span class="tdot" style="background:#ffbd2e"></span>
+        <span class="tdot" style="background:#27c93f"></span>
+        <span class="ttitle">guest@portfolio: ~</span>
+      </div>
+      <div class="b-term-body" id="b-body">
+        <div class="b-line b-out">Last login: Wed Jul 15 09:41:02 on tty1</div>
+        <div class="b-line"><span class="b-cmd">$</span> <span id="b-typed"></span><span class="b-cursor" id="b-cur"></span></div>
+        <div id="b-output"></div>
+        <div class="b-input-row" id="b-inputrow" style="display:none">
+          <span class="prompt">$</span>
+          <input class="b-input" id="b-input" autocomplete="off" spellcheck="false" placeholder="type a command (try: whoami, ls, help)">
+        </div>
+      </div>
+    </div>
+    <div class="b-hint">Try <code>whoami</code>, <code>ls</code>, <code>help</code>, <code>cat intro.txt</code>, <code>clear</code></div>
+  </div>
+</div>
+
+<!-- ===== VARIANT C: SPLIT + NOW ===== -->
+<div id="variant-c" class="variant content">
+  <div class="section c-wrap">
+    <div class="c-grid">
+      <div class="c-left">
+        <h1 class="c-h1">NGUYEN<br><span class="text-gradient">THAI TAI</span></h1>
+        <p class="c-role">Full-stack web developer based in Ho Chi Minh City. I build local-first tools, data GUIs, and AI-powered interfaces.</p>
+        <div class="c-ctas">
+          <a class="c-btn primary" href="#" onclick="event.preventDefault()">&#8594; SEE PROJECTS</a>
+          <a class="c-btn" href="#" onclick="event.preventDefault()">&#8595; RESUME</a>
+          <a class="c-btn" href="#" onclick="event.preventDefault()">&#9993; CONTACT</a>
+        </div>
+        <div class="c-socials">
+          <a class="icon-link" href="#" onclick="event.preventDefault()">GH</a>
+          <a class="icon-link" href="#" onclick="event.preventDefault()">IN</a>
+          <a class="icon-link" href="#" onclick="event.preventDefault()">X</a>
+        </div>
+      </div>
+      <div class="c-now">
+        <div class="c-now-head">
+          <span class="t">// now</span>
+          <span class="live"><span class="pulse"></span> ONLINE</span>
+        </div>
+        <div class="c-now-body">
+          <div class="c-now-row"><span class="k">Local time</span><span class="v" id="c-clock">--:--:--</span></div>
+          <div class="c-now-row"><span class="k">Location</span><span class="v">Ho Chi Minh City</span></div>
+          <div class="c-now-row"><span class="k">Status</span><span class="v acc">OPEN TO WORK</span></div>
+          <div class="c-now-row"><span class="k">Coding today</span><span class="v">4h 12m</span></div>
+          <div class="c-now-focus">
+            <div class="lbl">// current focus</div>
+            <div class="txt">KamehaDB &mdash; local-first database GUI with AI chat. Shipping cross-platform builds.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="sketch-tools" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.4'">
+  <select onchange="document.querySelector('link[href*=themes]').href='../themes/'+this.value+'.css'">
+    <option value="default">Default (dark)</option>
+  </select>
+  <button onclick="toggleLight()">LIGHT</button>
+  <button onclick="setViewport(375)">PHONE</button>
+  <button onclick="setViewport(768)">TAB</button>
+  <button onclick="setViewport(0)">FULL</button>
+</div>
+
+<script>
+function showVariant(id, e) {
+  document.querySelectorAll('.variant').forEach(v => v.style.display = 'none');
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('variant-' + id).style.display = 'block';
+  e.target.classList.add('active');
+  if (id === 'b') startTerminal();
+  if (id === 'c') startClock();
+}
+function toggleLight() { document.documentElement.classList.toggle('light'); }
+function setViewport(w) {
+  const c = document.querySelector('.variant.active');
+  if (w === 0) { c.style.maxWidth = ''; c.style.margin = ''; }
+  else { c.style.maxWidth = w + 'px'; c.style.margin = '0 auto'; }
+}
+
+/* Interactive terminal */
+let bStarted = false;
+function startTerminal() {
+  if (bStarted) { document.getElementById('b-input').focus(); return; }
+  bStarted = true;
+  const typed = document.getElementById('b-typed');
+  const phrase = 'cat intro.txt';
+  let i = 0;
+  const tick = setInterval(() => {
+    typed.textContent += phrase[i++];
+    if (i >= phrase.length) {
+      clearInterval(tick);
+      setTimeout(() => {
+        document.getElementById('b-cur').style.display = 'none';
+        const out = document.getElementById('b-output');
+        out.innerHTML = '<div class="b-line b-out">Full-stack web developer based in Ho Chi Minh City.</div>'
+          + '<div class="b-line b-out">I build local-first tools, data GUIs, and AI-powered interfaces.</div>'
+          + '<div class="b-line b-out">Currently sharpening edges on open source.</div>';
+        document.getElementById('b-inputrow').style.display = 'flex';
+        document.getElementById('b-input').focus();
+      }, 300);
+    }
+  }, 60);
+}
+
+const commands = {
+  help: ['available commands:', '  whoami      - who you are', '  ls          - list sections', '  cat intro.txt - read intro', '  projects    - jump to projects', '  contact     - how to reach me', '  clear       - clear screen'],
+  whoami: ['Nguyen Thai Tai - full-stack web developer, Ho Chi Minh City.'],
+  ls: ['about/', 'projects/', 'experience/', 'github/', 'contact/', 'intro.txt'],
+  'cat intro.txt': ['Full-stack web developer based in Ho Chi Minh City.', 'I build local-first tools, data GUIs, and AI-powered interfaces.', 'Currently sharpening edges on open source.'],
+  projects: ['-> opening /projects ... (in the real site this routes)'],
+  contact: ['email: hello@example.com', 'github: github.com/asta-nguyen', 'linkedin: linkedin.com/in/asta-nguyen'],
+  clear: null
+};
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'b-input') {
+    const input = document.getElementById('b-input');
+    const cmd = input.value.trim();
+    if (!cmd) return;
+    const body = document.getElementById('b-body');
+    const row = document.getElementById('b-inputrow');
+    const promptRow = document.createElement('div');
+    promptRow.className = 'b-line';
+    promptRow.innerHTML = '<span class="b-cmd">$</span> ' + escapeHtml(cmd);
+    body.insertBefore(promptRow, row);
+    input.value = '';
+    if (cmd === 'clear') { document.querySelectorAll('#b-body .b-line').forEach(l => l.remove()); return; }
+    const res = commands[cmd.toLowerCase()] || [`command not found: ${cmd}`, 'type "help" for commands'];
+    res.forEach(line => {
+      const d = document.createElement('div');
+      d.className = 'b-line b-out';
+      d.textContent = line;
+      body.insertBefore(d, row);
+    });
+    body.scrollTop = body.scrollHeight;
+  }
+});
+function escapeHtml(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* Clock for variant C */
+let clockTimer = null;
+function startClock() {
+  if (clockTimer) return;
+  const update = () => {
+    const el = document.getElementById('c-clock');
+    if (!el) return;
+    const now = new Date();
+    el.textContent = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh' });
+  };
+  update();
+  clockTimer = setInterval(update, 1000);
+}
+</script>
+</body>
+</html>

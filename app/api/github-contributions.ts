@@ -1,4 +1,4 @@
-import { ICON_URL } from "../shared/constant";
+import { getGitHubUsername } from "./github-username";
 
 const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
 const GITHUB_CONTRIBUTION_LEVELS = [
@@ -28,24 +28,6 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 const isGitHubContributionLevel = (value: unknown): value is GitHubContributionLevel =>
   typeof value === "string" && GITHUB_CONTRIBUTION_LEVELS.some((level) => level === value);
-
-const getGitHubUsername = () => {
-  const githubProfile = ICON_URL.find(
-    (link) => link.kind === "icon" && link.icon === "github",
-  )?.href;
-
-  if (!githubProfile) {
-    return null;
-  }
-
-  const githubPrefix = "https://github.com/";
-  if (!githubProfile.startsWith(githubPrefix)) {
-    return null;
-  }
-
-  const username = githubProfile.slice(githubPrefix.length).split("/")[0];
-  return username || null;
-};
 
 const getDateRange = () => {
   const endDate = new Date();

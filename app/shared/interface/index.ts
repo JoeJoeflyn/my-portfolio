@@ -8,10 +8,6 @@ export type CareerLogo =
       readonly kind: "image";
       readonly src: string;
       readonly alt: string;
-    }
-  | {
-      readonly kind: "text";
-      readonly text: string;
     };
 
 export type CareerEntry = {
@@ -74,12 +70,6 @@ export type WakaStatsType = {
   readonly languages?: readonly WakaStatItemType[];
   readonly editors?: readonly WakaStatItemType[];
   readonly operating_systems?: readonly WakaStatItemType[];
-};
-
-export type WakaInsightsType = {
-  readonly categories: [];
-  readonly date: string;
-  readonly total: number;
 };
 
 export type WakaSummaryType = {
